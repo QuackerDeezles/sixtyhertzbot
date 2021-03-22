@@ -863,6 +863,7 @@ async def on_message_delete(msg):
     if msg.mentions[0].bot:
       pass
     else:
+			# hello
       membername = msg.mentions[0].name
       listed = await get_names(msg.mentions)
       new_desc = f"**Author** \n{msg.author}\n\n**Member(s) Pinged**\n{listed}\n\n**Message**\n{msg.clean_content}"
