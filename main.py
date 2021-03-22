@@ -870,6 +870,10 @@ async def on_message_delete(msg):
       em = discord.Embed(title = 'Ghost Ping', description = new_desc, color = discord.Color.blue())
       await msg.channel.send(embed = em)
   else:
-    pass 
+    pass
+
+@client.command()
+async def hi(ctx):
+	await ctx.send("Hi lol")
 
 client.run(os.getenv("TOKEN"))
