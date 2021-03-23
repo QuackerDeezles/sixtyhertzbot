@@ -99,7 +99,7 @@ moderationsROLE = """
 
 perksROLE = """
 <@&783009905988468807> Someone who has boosted the server pog. They also get 20 monthly tokens.
-<@&796088132008804352> Someone who has donated to the server in some way
+<@&796088132008804352> Someone who has donated to the server in some way. If they gift nitro to someone that then boosts 60hz gang, they get 10 tokens per boost and for every $ they donate not in nitro to the server, they get another 10 tokens.
 <@&803486749253828658> A role given to a special few that get the following perks: 5 monthly tokens, #advertising at any level, giveaway priority, VIP on my Twitch streams, access to VIP and VIP+ only giveaways, and access to future plans for this server.
 <@&803486811480391680> The same as VIP, but... 5 more monthly tokens, a seasonal gold token, higher giveaway priority, access to VIP+ only giveaways, and access to future plans for my YT and Twitch.
 """
