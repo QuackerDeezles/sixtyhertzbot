@@ -705,7 +705,7 @@ async def staff(ctx):
         listMods += str(f) + ". " + name + '\n'
         f += 1
     for name in listofBoo:
-        serverBoosters += str(g) + ". " + name + ', '
+        serverBoosters += str(g) + ". " + name + ' '
         g += 1
     staffdesc = (serverowner + "\n1. [MoonFrost]((https://www.youtube.com/channel/UCxW9ilAhTGuhLvzIhgmSvyw))") + '\n\n' "2. **Server Co-Owner**\nQuackerDeezlesYT\n\n" + admin + '\n' + trialadmin + '\n' + listMods+ '\n' + mod + '\n' + trialmod + '\n' + devs + '\n' + serverBoosters
     em = discord.Embed(title='Current Staff + Boosters',
