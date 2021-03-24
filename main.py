@@ -724,7 +724,7 @@ async def boosters(ctx):
 		for name in listofBoo:
 			serverBoosters += str(a) + ". " + name + '\n'
 			a += 1
-		staffdesc = "<a:rainbow_boost:824117384297054225> Thank you to our server boosters!" + "\n\n" + serverBoosters
+		staffdesc = "<a:rainbow_boost:824117384297054225>  Thank you to our server boosters!" + "\n\n" + serverBoosters
 		em = discord.Embed(title='Current Boosters',
 												description=staffdesc,
 												color=discord.Color.purple())
