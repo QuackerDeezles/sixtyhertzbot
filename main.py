@@ -720,7 +720,7 @@ async def boosters(ctx):
 			# 		if role.name.lower() == 'server booster':
 			# 				listofBoo.append(member.name)
 		a = 1
-		serverBoosters = f"<:boost:824107533270384661 **Server Boosters ({len(listofBoo)})**\n"
+		serverBoosters = f"<:boost:824107533270384661> **Server Boosters ({len(listofBoo)})**\n"
 		for name in listofBoo:
 			serverBoosters += str(a) + ". " + name + '\n'
 			a += 1
