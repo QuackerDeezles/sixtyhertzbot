@@ -702,7 +702,7 @@ async def staff(ctx):
         listMods += str(f) + ". " + name + '\n'
         f += 1
 
-    staffdesc = (serverowner + "\n1. [MoonFrost]((https://www.youtube.com/channel/UCxW9ilAhTGuhLvzIhgmSvyw))") + '\n\n' "2. **Server Co-Owner**\nQuackerDeezlesYT\n\n" + admin + '\n' + trialadmin + '\n' + listMods+ '\n' + mod + '\n' + trialmod + '\n' + devs
+    staffdesc = (serverowner + "\n[MoonFrost]((https://www.youtube.com/channel/UCxW9ilAhTGuhLvzIhgmSvyw))") + '\n\n' "**Server Co-Owner**\nQuackerDeezlesYT\n\n" + admin + '\n' + trialadmin + '\n' + listMods+ '\n' + mod + '\n' + trialmod + '\n' + devs
     em = discord.Embed(title='Current Staff',
                        description=staffdesc,
                        color=discord.Color.purple())
@@ -720,7 +720,7 @@ async def boosters(ctx):
 			# 		if role.name.lower() == 'server booster':
 			# 				listofBoo.append(member.name)
 		a = 1
-		serverBoosters = f"<:boost:762396759871324190> **Server Boosters ({len(listofBoo)})**\n"
+		serverBoosters = f"<:boost:824107533270384661 **Server Boosters ({len(listofBoo)})**\n"
 		for name in listofBoo:
 			serverBoosters += str(a) + ". " + name + '\n'
 			a += 1
