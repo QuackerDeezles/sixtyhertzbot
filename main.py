@@ -683,7 +683,7 @@ async def staff(ctx):
     listMods = f"**List Managers ({len(listofLM)})**\n"
     serverBoosters = f"**Server Boosters ({len(listofBoo)})**\n"
     serverowner = f"[**Server Owner**](https://www.youtube.com/channel/UCxW9ilAhTGuhLvzIhgmSvyw)"
-    a, b, c, d, e,f = 1, 1, 1, 1, 1,1
+    a, b, c, d, e,f,g = 1, 1, 1, 1, 1,1,1
     for name in listofmods:
         mod += str(a) + ". " + name + '\n'
         a += 1
