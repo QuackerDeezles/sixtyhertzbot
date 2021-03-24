@@ -702,7 +702,7 @@ async def staff(ctx):
         listMods += str(f) + ". " + name + '\n'
         f += 1
 
-    staffdesc = (serverowner + "\n[MoonFrost]((https://www.youtube.com/channel/UCxW9ilAhTGuhLvzIhgmSvyw))") + '\n\n' "**Server Co-Owner**\nQuackerDeezlesYT\n\n" + admin + '\n' + trialadmin + '\n' + listMods+ '\n' + mod + '\n' + trialmod + '\n' + devs
+    staffdesc = (serverowner + "\n[MoonFrost]((https://www.youtube.com/channel/UCxW9ilAhTGuhLvzIhgmSvyw))") + '\n\n' "**Server Co-Owner (1)** \nQuackerDeezlesYT\n\n" + admin + '\n' + trialadmin + '\n' + listMods+ '\n' + mod + '\n' + trialmod + '\n' + devs
     em = discord.Embed(title='Current Staff',
                        description=staffdesc,
                        color=discord.Color.purple())
