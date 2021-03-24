@@ -658,7 +658,6 @@ async def staff(ctx):
     listofTA = []
     listofTM = []
     listofLM = []
-    listofBoo = []
     for member in ctx.guild.members:
         for role in member.roles:
             if role.name.lower() == 'trial admin':
@@ -673,15 +672,13 @@ async def staff(ctx):
                 listofDevs.append(member.name)
             elif role.name.lower() == 'list manager':
                 listofLM.append(member.name)
-            elif role.name.lower() == 'server booster':
-                listofBoo.append(member.name)
+            
     mod = f"**Server Mod ({len(listofmods)})**\n"
     admin = f"**Server Admin ({len(listofAdmins)})**\n"
     trialadmin = f"**Trial Admin ({len(listofTA)})**\n"
     trialmod = f"**Trial Mod ({len(listofTM)})**\n"
     devs = f"**Developers ({len(listofDevs)})**\n"
     listMods = f"**List Managers ({len(listofLM)})**\n"
-    serverBoosters = f"**Server Boosters ({len(listofBoo)})**\n"
     serverowner = f"[**Server Owner**](https://www.youtube.com/channel/UCxW9ilAhTGuhLvzIhgmSvyw)"
     a, b, c, d, e,f, g = 1, 1, 1, 1, 1,1,1
     for name in listofmods:
@@ -704,17 +701,36 @@ async def staff(ctx):
     for name in listofLM:
         listMods += str(f) + ". " + name + '\n'
         f += 1
-    for name in listofBoo:
-        serverBoosters += str(g) + ". " + name + ' '
-        g += 1
+
     staffdesc = (serverowner + "\n1. [MoonFrost]((https://www.youtube.com/channel/UCxW9ilAhTGuhLvzIhgmSvyw))") + '\n\n' "2. **Server Co-Owner**\nQuackerDeezlesYT\n\n" + admin + '\n' + trialadmin + '\n' + listMods+ '\n' + mod + '\n' + trialmod + '\n' + devs + '\n' + serverBoosters
-    em = discord.Embed(title='Current Staff + Boosters',
+    em = discord.Embed(title='Current Staff',
                        description=staffdesc,
                        color=discord.Color.purple())
     #em.set_thumbnail(url = ctx.guild.icon_url)
     await ctx.send(embed=em)
 
 
+@client.command()
+async def boosters(ctx):
+		listofBoo = []
+		for member in ctx.guild.members:
+				if member.premium_since:
+					listofBoo.append(member.name)
+				# for role in member.roles:
+				# 		if role.name.lower() == 'server booster':
+				# 				listofBoo.append(member.name)
+		a = 1
+		serverBoosters = f"<:boost:762396759871324190> **Server Boosters ({len(listofBoo)})**\n"
+		for name in listofBoo:
+			serverBoosters += str(b) + ". " + name + '\n'
+			b += 1
+		staffdesc = "<a:rainbow_boost:824117384297054225> Thank you to our server boosters!" + "\n\n" + serverBoosters
+		em = discord.Embed(title='Current Boosters',
+                       description=staffdesc,
+                       color=discord.Color.purple())
+    #em.set_thumbnail(url = ctx.guild.icon_url)
+    await ctx.send(embed=em)
+		
 @client.event
 async def on_ready():
     print("Bot is ready")
