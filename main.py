@@ -658,6 +658,7 @@ async def staff(ctx):
     listofTA = []
     listofTM = []
     listofLM = []
+    listofBoo = []
     for member in ctx.guild.members:
         for role in member.roles:
             if role.name.lower() == 'trial admin':
@@ -672,12 +673,15 @@ async def staff(ctx):
                 listofDevs.append(member.name)
             elif role.name.lower() == 'list manager':
                 listofLM.append(member.name)
+            elif role.name.lower() == 'server booster':
+                listofBoo.append(member.name)
     mod = f"**Server Mod ({len(listofmods)})**\n"
     admin = f"**Server Admin ({len(listofAdmins)})**\n"
     trialadmin = f"**Trial Admin ({len(listofTA)})**\n"
     trialmod = f"**Trial Mod ({len(listofTM)})**\n"
     devs = f"**Developers ({len(listofDevs)})**\n"
     listMods = f"**List Managers ({len(listofLM)})**\n"
+    serverBoosters = f"**Server Boosters ({len(listofBoo)})**\n"
     serverowner = f"[**Server Owner**](https://www.youtube.com/channel/UCxW9ilAhTGuhLvzIhgmSvyw)"
     a, b, c, d, e,f = 1, 1, 1, 1, 1,1
     for name in listofmods:
@@ -700,7 +704,10 @@ async def staff(ctx):
     for name in listofLM:
         listMods += str(f) + ". " + name + '\n'
         f += 1
-    staffdesc = (serverowner + "\n1. [MoonFrost]((https://www.youtube.com/channel/UCxW9ilAhTGuhLvzIhgmSvyw))") + '\n\n' +admin + '\n' + trialadmin + '\n' + listMods+ '\n' + mod + '\n' + trialmod + '\n' + devs
+    for name in listofBoo:
+        serverBoosters += str(f) + ". " + name + '\n'
+        f += 1
+    staffdesc = (serverowner + "\n1. [MoonFrost]((https://www.youtube.com/channel/UCxW9ilAhTGuhLvzIhgmSvyw))") + '\n\n' +admin + '\n' + trialadmin + '\n' + listMods+ '\n' + mod + '\n' + trialmod + '\n' + devs + '\n' + serverBoosters
     em = discord.Embed(title='Current Staff',
                        description=staffdesc,
                        color=discord.Color.purple())
