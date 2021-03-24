@@ -714,22 +714,22 @@ async def staff(ctx):
 async def boosters(ctx):
 		listofBoo = []
 		for member in ctx.guild.members:
-				if member.premium_since:
-					listofBoo.append(member.name)
-				# for role in member.roles:
-				# 		if role.name.lower() == 'server booster':
-				# 				listofBoo.append(member.name)
+			if member.premium_since:
+				listofBoo.append(member.name)
+			# for role in member.roles:
+			# 		if role.name.lower() == 'server booster':
+			# 				listofBoo.append(member.name)
 		a = 1
 		serverBoosters = f"<:boost:762396759871324190> **Server Boosters ({len(listofBoo)})**\n"
 		for name in listofBoo:
-			serverBoosters += str(b) + ". " + name + '\n'
-			b += 1
+			serverBoosters += str(a) + ". " + name + '\n'
+			a += 1
 		staffdesc = "<a:rainbow_boost:824117384297054225> Thank you to our server boosters!" + "\n\n" + serverBoosters
 		em = discord.Embed(title='Current Boosters',
-                       description=staffdesc,
-                       color=discord.Color.purple())
-    #em.set_thumbnail(url = ctx.guild.icon_url)
-    await ctx.send(embed=em)
+												description=staffdesc,
+												color=discord.Color.purple())
+		#em.set_thumbnail(url = ctx.guild.icon_url)
+		await ctx.send(embed=em)
 		
 @client.event
 async def on_ready():
