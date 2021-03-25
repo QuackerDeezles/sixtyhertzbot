@@ -897,4 +897,8 @@ async def on_message_delete(msg):
 
 
 
+@client.command()
+async def hi(ctx):
+	await ctx.send("hi")
+
 client.run(os.getenv("TOKEN"))
