@@ -418,7 +418,7 @@ async def roleinfo(ctx, page=1):
         em = discord.Embed(
             title='Table of Contents',
             description=
-            'Use `!roleinfo <page>` to find information about a specific category of roles \n\n**1** - Table of Contents (current page)\n**2** - Demons \n**3** - 60hz/Non-60hz \n**4** - Pointercrate \n**5** - Competitions \n**6** - Collabs \n**7** - Moderation (admin, trial admin, etc.) \n**8** - Perks (vip, server booster, donator, etc.) \n**9** - Misc (giveaway winner, content creator, etc.) \n**10** - Leaderboard Topper Roles\n**11** - Member Roles',
+            'Use `!roleinfo <page>` to find information about a specific category of roles \n\n**1** - Table of Contents (current page)\n**2** - Demons \n**3** - 60hz/Non-60hz \n**4** - Competitions \n**5** - Collabs \n**6** - Moderation (admin, trial admin, etc.) \n**7** - Perks (vip, server booster, donator, etc.) \n**8** - Misc (giveaway winner, content creator, etc.) \n**9** - Leaderboard Topper Roles\n**10** - Member Roles',
             color=discord.Color.blue())
 
         await ctx.send(embed=em)
@@ -436,42 +436,38 @@ async def roleinfo(ctx, page=1):
                            color=discord.Color.red())
 
         await ctx.send(embed=em)
+
     elif page == 4:
-        em = discord.Embed(title='Pointercrate Roles',
-                           description=f'{pointercrateROLE}',
-                           color=discord.Color.orange())
-        await ctx.send(embed=em)
-    elif page == 5:
         em = discord.Embed(title='Competition Roles',
                            description=f'{competitionROLE}',
                            color=discord.Color.green())
         await ctx.send(embed=em)
-    elif page == 6:
+    elif page == 5:
         em = discord.Embed(title='Collaboration Roles',
                            description=f'{collabROLE}',
                            color=discord.Color.blue())
         await ctx.send(embed=em)
-    elif page == 7:
+    elif page == 6:
         em = discord.Embed(title='Moderation Roles',
                            description=f'{moderationsROLE}',
                            color=discord.Color.blue())
         await ctx.send(embed=em)
-    elif page == 8:
+    elif page == 7:
         em = discord.Embed(title='Perk Roles :smirk: ',
                            description=f'{perksROLE}',
                            color=discord.Color.blue())
         await ctx.send(embed=em)
-    elif page == 9:
+    elif page == 8:
         em = discord.Embed(title='Misc Roles',
                            description=f'{miscROLE}',
                            color=discord.Color.blue())
         await ctx.send(embed=em)
-    elif page == 10:
+    elif page == 9:
         em = discord.Embed(title='Leaderboard Topper Roles',
                            description=f'{leaderboardToppers}',
                            color=discord.Color.red())
         await ctx.send(embed=em)
-    elif page == 11:
+    elif page == 10:
         em = discord.Embed(title='Member Roles',
                            description=f'{memberRolesROLE}',
                            color=discord.Color.blue())
