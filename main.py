@@ -71,6 +71,18 @@ async def _gdshop(ctx): # Defines a new "context" (ctx) command called "ping."
                     value=gdshopGoldToken)
     await ctx.send(embed=embed)
 
+@slash.slash(name="shop", 
+            description="Shows the current token shop.",
+            guild_ids=guild_ids)
+async def _gdshop(ctx): # Defines a new "context" (ctx) command called "ping."
+    
+    await ctx.respond()
+    embed = discord.Embed(title='60hz Gang Shop', color=discord.Color.purple())
+    embed.add_field(name='Normal Shop', value=gdshopToken)
+    embed.add_field(name='Special Shop (1 Gold Token Each)',
+                    value=gdshopGoldToken)
+    await ctx.send(embed=embed) 
+
 @client.command(aliases=['shop', '60hzshop'])
 async def gdshop(ctx):
     embed = discord.Embed(title='60hz Gang Shop', color=discord.Color.purple())
@@ -803,9 +815,112 @@ async def remove_suggestion_error(ctx, error):
             "You do not have the required permissions to use this command.")
     else:
         raise error
+async def add_warns(member,json_files,reason):
+  json_files[str(member.guild.id)][str(member.id)]["warns"].append({"reason" : reason, "time" : datetime.datetime.now().strftime("%B %d, %Y  %I: %M %p UTC")})
 
+async def setup_warns(member,json_files):
+  if not str(member.guild.id) in json_files:
+    print("True 1")
+    json_files[str(member.guild.id)] = {}
+  if not str(member.id) in json_files[str(member.guild.id)]:
+
+    json_files[str(member.guild.id)][str(member.id)] = {}
+  if not "warns" in json_files[str(member.guild.id)][str(member.id)]:
+
+    json_files[str(member.guild.id)][str(member.id)]["warns"] = []
 
 @client.command()
+@commands.has_permissions(manage_messages = True)
+async def warn(ctx,member : discord.Member = None, *, reason = None):
+  if not reason:
+    reason = "None"
+  if not member:
+    return await ctx.send("Invalid Command Usage. Remember to do `%warn <member> (optional reason`")
+  
+  em = discord.Embed(title = "Member Warn", color = discord.Color.blue())
+  em.add_field(name = "__Member Warned__", value = f"\n**Name:** {member}\n**ID:** {member.id}", inline = True)
+  em.add_field(name = "__Moderator__", value = f"\n**Name:** {ctx.author}\n**ID:** {ctx.author.id}", inline = True)
+  em.add_field(name = "__Reason__", value = f"{reason}", inline = False)
+  with open('warns.json','r') as f:
+    warns = json.load(f)
+  await setup_warns(member,warns)
+  await add_warns(member,warns,reason)
+  em.timestamp = ctx.message.created_at
+  with open('warns.json','w') as f:
+    json.dump(warns,f,indent=4)
+  await ctx.send(embed = em)
+@client.command()
+@commands.has_permissions(manage_messages = True)
+async def clearwarns(ctx,member : discord.Member = None):
+  if not member:
+    return await ctx.send("Invalid Command Usage. Remember to do `%clear_warns <@member>`")
+  
+  with open('warns.json','r') as f:
+    warns = json.load(f)
+  await setup_warns(member,warns)
+  warns[str(member.guild.id)][str(member.id)]["warns"].clear()
+  with open('warns.json','w') as f:
+    json.dump(warns,f,indent=4)
+  await ctx.send(f"All the warns for **{member}** were cleared! ")
+
+@client.command()
+@commands.has_permissions(manage_messages = True)
+async def deletewarn(ctx,member : discord.Member = None, warn_number : int = None):
+  if not member or not warn_number:
+    return await ctx.send("Invalid Command Usage. Remember to do `%delete_warn <@member> <number>`")
+  with open('warns.json','r') as f:
+    warns = json.load(f)
+  await setup_warns(member,warns)
+  warns[str(member.guild.id)][str(member.id)]["warns"].pop(warn_number - 1)
+  with open('warns.json','w') as f:
+    json.dump(warns,f,indent=4)
+  await ctx.send(f"Warn {warn_number} was cleared for **{member}**")
+
+
+async def get_warn_info(member,json_files):
+  list_of_warns = json_files[str(member.guild.id)][str(member.id)]["warns"]
+  print(json_files[str(member.guild.id)][str(member.id)]["warns"])  
+  warn_list = ""
+  reason_list = ""
+  dates = ""
+  x = 1
+  for warn in list_of_warns:
+    reason_list += warn["reason"] + "\n"
+    warn_list += f"Warn {x} \n"
+    dates += warn["time"] + "\n"
+    x += 1
+    print("worked")
+
+  print("done")
+  return [warn_list,reason_list, dates]
+
+
+
+@client.command(aliases = ['warns'])
+async def infractions(ctx, member : discord.Member = None):
+  if not member:
+    member = ctx.author
+  with open('warns.json','r') as f:
+    warns = json.load(f)
+  await setup_warns(member,warns)
+  info_list = await get_warn_info(member,warns)
+  #warns = info_list[0]
+  reasons = info_list[1]
+  dates = info_list[2]
+  if (dates == "") and (reasons == ""):
+    #warns = "None"
+    reasons = "None"
+    dates = "None"
+  em = discord.Embed(title = f"Infractions for {member.name}", color = discord.Color.green())
+  #em.add_field(name ="Warns",value=f"{warns}",inline =True)
+  em.add_field(name = "Reasons", value = reasons, inline = True)
+  em.add_field(name = "Time", value = dates, inline = True)
+  em.set_author(name = member, icon_url = member.avatar_url)
+  em.timestamp = ctx.message.created_at
+  em.set_footer(text = f"Requested by {ctx.author}", icon_url = ctx.author.avatar_url)
+  await ctx.send(embed = em)
+
+@client.command(aliases = ['rule'])
 async def rules(ctx, *, page: int = None):
     ruledesc = ''
     rulereason = ''
@@ -850,7 +965,8 @@ async def rules(ctx, *, page: int = None):
         elif page == 11:
             ruledesc = 'If you have completed an Extreme Demon or a List Demon, it will not officially be believed unless there is video proof (and list points if it\'s a list demon)'
             rulereason = 'Extreme Demons and Lists Demons are quite hard to complete which is why they will need some proof that you actually did it. Remember to never cheat!'
-
+				elif page > 11:
+					return await ctx.send("There are only 11 rules!")
         em = discord.Embed(
             title=f'Rule {page} | {ruledesc}',
             description=f'\n\n__**Why is this a rule?**__\n\n{rulereason}',
