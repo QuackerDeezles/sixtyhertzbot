@@ -691,7 +691,7 @@ async def staff(ctx):
 
     for name in listofTA:
         trialadmin += str(c) + ". " + name + '\n'
-        c += 1 
+        c += 1
     for name in listofTM:
         trialmod += str(d) + ". " + name + '\n'
         d += 1
