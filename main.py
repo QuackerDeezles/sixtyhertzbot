@@ -432,7 +432,7 @@ async def roleinfo(ctx, page=1):
     elif page == 3:
 
         em = discord.Embed(title='GD/Self Roles',
-                           description=f'{gdrolesROLE}',
+                           description=f'**Get these roles in <#797897371866234910> by reacting!**\n\n{gdrolesROLE}',
                            color=discord.Color.red())
 
         await ctx.send(embed=em)
@@ -472,6 +472,10 @@ async def roleinfo(ctx, page=1):
                            description=f'{memberRolesROLE}',
                            color=discord.Color.blue())
         await ctx.send(embed=em)
+		elif page == 11:
+				em = discord.Embed(title = "Ping Roles",
+													description = "x",
+													color = discord.Color.gray())
     else:
         await ctx.send(
             "**Invalid Number/ Command Usage.** \nRemember to do `!roleinfo <page_number>`. You can only go up to 10 pages."
@@ -716,7 +720,7 @@ async def boosters(ctx):
 			# 		if role.name.lower() == 'server booster':
 			# 				listofBoo.append(member.name)
 		a = 1
-		serverBoosters = f"<:boost:824107533270384661> **Server Boosters ({len(listofBoo)})**\n"
+		serverBoosters = f"<:sparkleboost:825156918519398410> **Server Boosters ({len(listofBoo)})**\n"
 		for name in listofBoo:
 			serverBoosters += str(a) + ". " + name + '\n'
 			a += 1

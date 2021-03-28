@@ -93,7 +93,7 @@ moderationsROLE = """
 <@&779053250069397524> Those training to become an admin
 <@&779053192184987689> Those training to become a mod
 <@&758790944521715804> Creators of Discord bots or other coding things
-<@&757385714529730629> Those that will help add and place levels to the server 60hz and non-60hz lists
+<@&811406896120201226> Those that will help add and place levels to the server 60hz and non-60hz lists
 
 """
 
