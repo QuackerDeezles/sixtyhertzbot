@@ -420,23 +420,17 @@ async def roleinfo(ctx, page=1):
 						description=
 						'Use `!roleinfo <page>` to find information about a specific category of roles \n\n**1** - Table of Contents (current page)\n**2** - Demons \n**3** - 60hz/Non-60hz \n**4** - Competitions \n**5** - Collabs \n**6** - Moderation (admin, trial admin, etc.) \n**7** - Perks (vip, server booster, donator, etc.) \n**8** - Misc (giveaway winner, content creator, etc.) \n**9** - Leaderboard Topper Roles\n**10** - Member Roles',
 						color=discord.Color.blue())
-
 				await ctx.send(embed=em)
 		elif page == 2:
-
 				em = discord.Embed(title='Demon Roles',
 													description=f'{demonsROLE}',
 													color=discord.Color.blue())
-
 				await ctx.send(embed=em)
 		elif page == 3:
-
 				em = discord.Embed(title='GD/Self Roles',
 													description=f'**Get these roles in <#797897371866234910> by reacting!**\n\n{gdrolesROLE}',
 													color=discord.Color.red())
-
 				await ctx.send(embed=em)
-
 		elif page == 4:
 				em = discord.Embed(title='Competition Roles',
 													description=f'{competitionROLE}',
