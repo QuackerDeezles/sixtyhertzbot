@@ -809,7 +809,7 @@ async def remove_suggestion_error(ctx, error):
 async def rules(ctx, *, page: int = None):
     ruledesc = ''
     rulereason = ''
-    not_desc = 'Use `!rules <number>` to find each rule\n\n**1.**  No Spamming\n**2.** Use Channels Correctly\n**3.** No Asking for Mod\n**4.** No Racism or other similar things\n**5.** Only Ping with a Valid Reason\n**6.** Be respectful to each other (this includes no bullying, hate speech, harassment, etc.)\n**7.** Respect decisions made by the staff (unless it violates one of the rules)\n**8.** Try to keep politics/controversial topics out of the chat. \n**9.** Don\'t try to start any arguments here. \n**10.** If you have completed an Extreme Demon or a List Demon, it will not officially be believed unless there is video proof (and list points if it\'s a list demon)'
+    not_desc = 'Use `!rules <number>` to find each rule\n\n**1.**  No Spamming\n**2.** Use Channels Correctly\n**3.** No Asking for Mod\n**4.** No Racism or other similar things\n**5.** Only Ping with a Valid Reason\n**6.** Be respectful to each other (this includes no bullying, hate speech, harassment, etc.)\n**7.** No NSFW is tolerated whatsoever.\n**8.** Respect decisions made by the staff (unless it violates one of the rules)\n**9.** Try to keep politics/controversial topics out of the chat. \n**10.** Don\'t try to start any arguments here. \n**11.** If you have completed an Extreme Demon or a List Demon, it will not officially be believed unless there is video proof (and list points if it\'s a list demon)'
     if not page:
         em = discord.Embed(title='60hz Gang Rules',
                            description=not_desc,
@@ -836,15 +836,18 @@ async def rules(ctx, *, page: int = None):
             ruledesc = 'Be respectful to each other (this includes no bullying, hate speech, harassment, etc.)'
             rulereason = 'Like Rule 4, bullying and hate speech can depress people and can make people feel offended.'
         elif page == 7:
+            ruledesc = 'No NSFW is tolerated whatsoever.'
+            rulereason = 'We want to keep 60hz Gang as SFW as possible to make the members feel comfortable whenever they enter the server.'
+        elif page == 8:
             ruledesc = 'Respect decisions made by the staff (unless it violates one of the rules)'
             rulereason = 'Staff have higher authority over normal members because usually they would know the correct thing to do in certain situations, even if it impacts you.'
-        elif page == 8:
+        elif page == 9:
             ruledesc = 'Try to keep politics/controversial topics out of the chat.'
             rulereason = 'Politics and controversial topics can spark arguments pretty quickly and we want to limit the amount of fights that happen in the server.'
-        elif page == 9:
+        elif page == 10:
             ruledesc = 'Don\'t try to start any arguments here.'
             rulereason = 'Arguments can create tension in the server, so we try our best to prohibit that from happening. If it gets too out of hand, the staff will take action.'
-        elif page == 10:
+        elif page == 11:
             ruledesc = 'If you have completed an Extreme Demon or a List Demon, it will not officially be believed unless there is video proof (and list points if it\'s a list demon)'
             rulereason = 'Extreme Demons and Lists Demons are quite hard to complete which is why they will need some proof that you actually did it. Remember to never cheat!'
 
