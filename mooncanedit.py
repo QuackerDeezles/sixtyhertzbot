@@ -29,7 +29,15 @@ list_desc = """
 """  
 
 competition_info = """
-There are no competitions right now.
+**- Server Banner Competition -**
 
+So, recently, we just got boosted to Level 2! Along with that, Level 2 gave some perks which in one of them it included a server banner. So, we decided to have a competition to see who can make the best server banner. The competition will end on April 9th. You can send your submissions in #comp-entries-and-proof. Good luck!
+
+
+**Required Image Size**
+Go for a 16:9 ratio image
+
+**Competition End Date**
+4/9/2020
 
 """
