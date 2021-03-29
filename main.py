@@ -422,7 +422,7 @@ async def _role(ctx, role):
 				await ctx.send(embed=em)
 		elif page == "2":
 				em = discord.Embed(title='GD/Self Roles',
-													description=f'**Get these roles in <#797897371866234910> by reacting!**\n\n{gdrolesROLE}',
+													description=f'Get these roles in <#797897371866234910> by reacting!\n{gdrolesROLE}',
 													color=discord.Color.red())
 				await ctx.respond()
 				await ctx.send(embed=em)
