@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import os
 import json
-
+import datetime
 import asyncio
 from mooncanedit import gdshopToken, gdshopGoldToken, list_desc, competition_info
 from roleStuff import demonsROLE, gdrolesROLE, pointercrateROLE, competitionROLE, collabROLE, moderationsROLE, perksROLE, miscROLE, memberRolesROLE, leaderboardToppers
