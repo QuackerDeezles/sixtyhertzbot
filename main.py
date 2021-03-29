@@ -922,15 +922,15 @@ async def infractions(ctx, member : discord.Member = None):
 
 @client.command(aliases = ['rule'])
 async def rules(ctx, *, page: int = None):
-    ruledesc = ''
-    rulereason = ''
-    not_desc = 'Use `!rules <number>` to find each rule\n\n**1.**  No Spamming\n**2.** Use Channels Correctly\n**3.** No Asking for Mod\n**4.** No Racism or other similar things\n**5.** Only Ping with a Valid Reason\n**6.** Be respectful to each other (this includes no bullying, hate speech, harassment, etc.)\n**7.** No NSFW is tolerated whatsoever.\n**8.** Respect decisions made by the staff (unless it violates one of the rules)\n**9.** Try to keep politics/controversial topics out of the chat. \n**10.** Don\'t try to start any arguments here. \n**11.** If you have completed an Extreme Demon or a List Demon, it will not officially be believed unless there is video proof (and list points if it\'s a list demon)'
-    if not page:
-        em = discord.Embed(title='60hz Gang Rules',
-                           description=not_desc,
-                           color=discord.Color.green())
-        await ctx.send(embed=em)
-    else:
+		ruledesc = ''
+		rulereason = ''
+		not_desc = 'Use `!rules <number>` to find each rule\n\n**1.**  No Spamming\n**2.** Use Channels Correctly\n**3.** No Asking for Mod\n**4.** No Racism or other similar things\n**5.** Only Ping with a Valid Reason\n**6.** Be respectful to each other (this includes no bullying, hate speech, harassment, etc.)\n**7.** No NSFW is tolerated whatsoever.\n**8.** Respect decisions made by the staff (unless it violates one of the rules)\n**9.** Try to keep politics/controversial topics out of the chat. \n**10.** Don\'t try to start any arguments here. \n**11.** If you have completed an Extreme Demon or a List Demon, it will not officially be believed unless there is video proof (and list points if it\'s a list demon)'
+		if not page:
+				em = discord.Embed(title='60hz Gang Rules',
+													description=not_desc,
+													color=discord.Color.green())
+				await ctx.send(embed=em)
+		else:
 
 				if page == 1:
 						ruledesc = 'No Spamming'
