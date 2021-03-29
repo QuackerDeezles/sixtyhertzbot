@@ -168,7 +168,6 @@ getHelpMenudesc = """
   guild_ids=guild_ids
   #channel_ids = [805878707012108288,759974319799140412]
   )
-
 async def _give(ctx,receiver,amount,token_type, reason):
   if ctx.author.guild_permissions.administrator:
 
@@ -318,6 +317,74 @@ async def _remove(ctx,receiver,amount, token_type, reason):
   else:
       await ctx.respond(eat = True)
       await ctx.send(content = "You do not have permission to use this command.", hidden=True)
+
+@slash.slash(description ="View the rules of the server",
+ 	options = [
+   manage_commands.create_option(
+    name = "rule",
+    description = "The specific rule option you want to pick",
+    option_type = 3,
+    required = True,
+		choices = [
+			manage_commands.create_choice("1", "No Spamming")
+			manage_commands.create_choice("2", "Use Channels Correctly")
+			manage_commands.create_choice("3","No Asking for Mod")
+			manage_commands.create_choice("4","No Racism or other similar things")
+			manage_commands.create_choice("5","Only Ping with a Valid Reason")
+			manage_commands.create_choice("6","Be respectful to each other (this includes no bullying, hate speech, harassment, etc.)")
+			manage_commands.create_choice("7","No NSFW is tolerated whatsoever.")
+			manage_commands.create_choice("8","Respect decisions made by the staff.")
+			manage_commands.create_choice("9","Try to keep politics/controversial topics out of the chat.")
+			manage_commands.create_choice("10","Don\'t try to start any arguments here.")
+			manage_commands.create_choice("11","Extreme Demons and List Demons need video evidence")
+		]
+  )
+ ])
+async def _rules(ctx, rule):
+		ruledesc = ''
+		rulereason = ''
+
+
+			if rule == "1":
+					ruledesc = 'No Spamming'
+					rulereason = 'Spamming clogs up channels and is quite annoying.'
+			elif page == "2":
+					ruledesc = 'Use Channels Correctly'
+					rulereason = 'Different channels are meant for different reasons, so all content should go in their appropriate location.'
+			elif page == "3":
+					ruledesc = 'No Asking for Mod'
+					rulereason = 'This is kind of obvious. Everyone wants mod, but everyone can\'t get it. Being a moderator means having a big responsibility of the server. If you want to actually become a mod, you can DM MoonFrost and ask for the staff applications. We may not allow any submissions if mods are not necessary.'
+			elif page == "4":
+					ruledesc = 'No Racism or other similar things'
+					rulereason = 'Racism can be offensive to some people (obviously), so it is strictly prohibited'
+			elif page == "5":
+					ruledesc = 'Only Ping with a Valid Reason'
+					rulereason = 'Excessively pinging people for no reason at all can be annoying for the people getting pinged.'
+			elif page == "6":
+					ruledesc = 'Be respectful to each other (this includes no bullying, hate speech, harassment, etc.)'
+					rulereason = 'Like Rule 4, bullying and hate speech can depress people and can make people feel offended.'
+			elif page == "7":
+					ruledesc = 'No NSFW is tolerated whatsoever.'
+					rulereason = 'We want to keep 60hz Gang as SFW as possible to make the members feel comfortable whenever they enter the server.'
+			elif page == "8":
+					ruledesc = 'Respect decisions made by the staff (unless it violates one of the rules)'
+					rulereason = 'Staff have higher authority over normal members because usually they would know the correct thing to do in certain situations, even if it impacts you.'
+			elif page == "9":
+					ruledesc = 'Try to keep politics/controversial topics out of the chat.'
+					rulereason = 'Politics and controversial topics can spark arguments pretty quickly and we want to limit the amount of fights that happen in the server.'
+			elif page == "10":
+					ruledesc = 'Don\'t try to start any arguments here.'
+					rulereason = 'Arguments can create tension in the server, so we try our best to prohibit that from happening. If it gets too out of hand, the staff will take action.'
+			elif page == "11":
+					ruledesc = 'If you have completed an Extreme Demon or a List Demon, it will not officially be believed unless there is video proof (and list points if it\'s a list demon)'
+					rulereason = 'Extreme Demons and Lists Demons are quite hard to complete which is why they will need some proof that you actually did it. Remember to never cheat!'
+			
+			em = discord.Embed(
+					title=f'Rule {page} | {ruledesc}',
+					description=f'\n\n__**Why is this a rule?**__\n\n{rulereason}',
+					color=discord.Color.green())
+			await ctx.respond()
+			await ctx.send(embed=em)
 
 @client.command(aliases=['donate', 'transfer', 'give'])
 @commands.has_permissions(administrator=True)
