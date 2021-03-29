@@ -589,7 +589,7 @@ async def roleinfo(ctx, page=1):
 				await ctx.send(embed=em)
 		elif page == 3:
 				em = discord.Embed(title='GD/Self Roles',
-													description=f'**Get these roles in <#797897371866234910> by reacting!**\n\n{gdrolesROLE}',
+													description=f'Get these roles in <#797897371866234910> by reacting!\n{gdrolesROLE}',
 													color=discord.Color.red())
 				await ctx.send(embed=em)
 		elif page == 4:
@@ -630,7 +630,7 @@ async def roleinfo(ctx, page=1):
 		elif page == 11:
 				em = discord.Embed(title = "Ping Roles",
 													description = f"{pingsROLE}",
-													color = discord.Color.gray())
+													color = discord.Color.light_gray())
 		else:
 				await ctx.send(
 						"**Invalid Number/ Command Usage.** \nRemember to do `!roleinfo <page_number>`. You can only go up to 10 pages."

@@ -92,7 +92,7 @@ moderationsROLE = """
 <@&760317079466409994> Moderators of this server
 <@&779053250069397524> Those training to become an admin
 <@&779053192184987689> Those training to become a mod
-<@&758790944521715804> Creators of Discord bots or other coding things
+<@&758790944521715804> Developers of 60hz Gang Bot
 <@&811406896120201226> Those that will help add and place levels to the server 60hz and non-60hz lists
 
 """
@@ -102,18 +102,18 @@ perksROLE = """
 <@&796088132008804352> Someone who has donated to the server in some way. If they have  given nitro to someone that boosted the server with nitro, they get 10 tokens per boost. For every US dollar they donate to the server (excluding nitro), they get another 10 tokens.
 <@&803486749253828658> A role given to a special few that get the following perks: 5 monthly tokens, #advertising at any level, giveaway priority, VIP on my Twitch streams, access to VIP and VIP+ only giveaways, and access to future plans for this server.
 <@&803486811480391680> The same as VIP, but... 5 more monthly tokens, a seasonal gold token, higher giveaway priority, access to VIP+ only giveaways, and access to future plans for my YT and Twitch.
+<@&799003895531438101> - A member in the server that is level 5. With level 5, you will get access to #advertising and be able to post images and gifs in #general
 """
 
 miscROLE = """
 <@&799680362271866940> Someone who has won a giveaway
 <@&770713196934987776> A content creator with 100+ Subscribers/Followers (Proof req.)
 <@&768909786192150619> Someone who has creator points in Geometry Dash (Proof req.)
-<@&758403393751613560> Someone who's server has partnered with this server
 """
 
 memberRolesROLE = """
 <@&758028817280401550> Any member in this server
-<@&799003895531438101> - A member in the server that is level 5
+
 """
 
 leaderboardToppers = """
