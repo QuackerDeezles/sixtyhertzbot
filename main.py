@@ -23,7 +23,6 @@ verifiedEMOJI = "<a:verified:805929172451065879>"
 redloading = '<a:red_loading:805930785919467521>'
 
 
-
 guild_ids = [782651282128896020,757383943116030074] # Put your server ID in this array.
 
 
@@ -318,7 +317,9 @@ async def _remove(ctx,receiver,amount, token_type, reason):
       await ctx.respond(eat = True)
       await ctx.send(content = "You do not have permission to use this command.", hidden=True)
 
-@slash.slash(description ="View the rules of the server",
+@slash.slash(
+	name = "rule",
+	description ="View the rules of the server",
  	options = [
    manage_commands.create_option(
     name = "rule",
@@ -339,7 +340,8 @@ async def _remove(ctx,receiver,amount, token_type, reason):
 			manage_commands.create_choice("11","Extreme Demons and List Demons need video evidence")
 		]
   )
- ])
+ ],
+ guild_ids = guild_ids)
 async def _rules(ctx, rule):
 		ruledesc = ''
 		rulereason = ''
