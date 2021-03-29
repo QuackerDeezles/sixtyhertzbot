@@ -5,7 +5,7 @@ import json
 import datetime
 import asyncio
 from mooncanedit import gdshopToken, gdshopGoldToken, list_desc, competition_info
-from roleStuff import demonsROLE, gdrolesROLE, pointercrateROLE, competitionROLE, collabROLE, moderationsROLE, perksROLE, miscROLE, memberRolesROLE, leaderboardToppers
+from roleStuff import demonsROLE, gdrolesROLE, pointercrateROLE, competitionROLE, collabROLE, moderationsROLE, perksROLE, miscROLE, memberRolesROLE, leaderboardToppers, pingsROLE
 # import keep_alive
 from discord_slash import SlashCommand, SlashContext
 from itertools import cycle
@@ -332,7 +332,7 @@ async def _remove(ctx,receiver,amount, token_type, reason):
 			manage_commands.create_choice("3","No Asking for Mod"),
 			manage_commands.create_choice("4","No Racism or other similar things"),
 			manage_commands.create_choice("5","Only Ping with a Valid Reason"),
-			manage_commands.create_choice("6","Be respectful to each other (this includes no bullying, hate speech, harassment, etc.)"),
+			manage_commands.create_choice("6","Be respectful to each other."),
 			manage_commands.create_choice("7","No NSFW is tolerated whatsoever."),
 			manage_commands.create_choice("8","Respect decisions made by the staff."),
 			manage_commands.create_choice("9","Try to keep politics/controversial topics out of the chat."),
@@ -363,14 +363,14 @@ async def _rules(ctx, rule):
 				ruledesc = 'Only Ping with a Valid Reason'
 				rulereason = 'Excessively pinging people for no reason at all can be annoying for the people getting pinged.'
 		elif rule == "6":
-				ruledesc = 'Be respectful to each other (this includes no bullying, hate speech, harassment, etc.)'
-				rulereason = 'Like Rule 4, bullying and hate speech can depress people and can make people feel offended.'
+				ruledesc = 'Be respectful to each other'
+				rulereason = 'This includes no bullying, hate speech, harassment, etc.) Like Rule 4, bullying and hate speech can depress people and can make people feel offended.'
 		elif rule == "7":
 				ruledesc = 'No NSFW is tolerated whatsoever.'
 				rulereason = 'We want to keep 60hz Gang as SFW as possible to make the members feel comfortable whenever they enter the server.'
 		elif rule == "8":
-				ruledesc = 'Respect decisions made by the staff (unless it violates one of the rules)'
-				rulereason = 'Staff have higher authority over normal members because usually they would know the correct thing to do in certain situations, even if it impacts you.'
+				ruledesc = 'Respect decisions made by the staff '
+				rulereason = 'Staff have higher authority over normal members because usually they would know the correct thing to do in certain situations, even if it impacts you. This rule applies all the time unless it violates a rule.'
 		elif rule == "9":
 				ruledesc = 'Try to keep politics/controversial topics out of the chat.'
 				rulereason = 'Politics and controversial topics can spark arguments pretty quickly and we want to limit the amount of fights that happen in the server.'
@@ -387,6 +387,96 @@ async def _rules(ctx, rule):
 				color=discord.Color.green())
 		await ctx.respond()
 		await ctx.send(embed=em)
+
+@slash.slash(
+	name = "role",
+	description ="View the roles of the server",
+ 	options = [
+   	manage_commands.create_option(
+    	name = "role",
+    	description = "The specific role category you want to pick",
+    	option_type = 3,
+    	required = True,
+			choices = [
+				manage_commands.create_choice("1", "Demon Roles"),
+				manage_commands.create_choice("2", "GD/Self Roles"),
+				manage_commands.create_choice("3","Competition Roles"),
+				manage_commands.create_choice("4","Collaboration Roles"),
+				manage_commands.create_choice("5","Staff Roles"),
+				manage_commands.create_choice("6","Perk Roles"),
+				manage_commands.create_choice("7","Misc Roles"),
+				manage_commands.create_choice("8","Leaderboard Topper Roles"),
+				manage_commands.create_choice("9","Member Roles"),
+				manage_commands.create_choice("10","Ping Roles")
+			]
+  )
+ 	],
+ 	guild_ids = guild_ids)
+async def _role(ctx, role):
+		page = role
+		if page == "1":
+				em = discord.Embed(title='Demon Roles',
+														description=f'{demonsROLE}',
+														color=discord.Color.blue())
+				await ctx.respond()
+				await ctx.send(embed=em)
+		elif page == "2":
+				em = discord.Embed(title='GD/Self Roles',
+													description=f'**Get these roles in <#797897371866234910> by reacting!**\n\n{gdrolesROLE}',
+													color=discord.Color.red())
+				await ctx.respond()
+				await ctx.send(embed=em)
+		elif page == "3":
+				em = discord.Embed(title='Competition Roles',
+													description=f'{competitionROLE}',
+													color=discord.Color.green())
+				await ctx.respond()
+				await ctx.send(embed=em)
+		elif page == "4":
+				em = discord.Embed(title='Collaboration Roles',
+													description=f'{collabROLE}',
+													color=discord.Color.blue())
+				await ctx.respond()
+				await ctx.send(embed=em)
+		elif page == "5":
+				em = discord.Embed(title='Staff Roles',
+													description=f'{moderationsROLE}',
+													color=discord.Color.blue())
+				await ctx.respond()
+				await ctx.send(embed=em)
+		elif page == "6":
+				em = discord.Embed(title='Perk Roles :smirk: ',
+													description=f'{perksROLE}',
+													color=discord.Color.blue())
+				await ctx.respond()
+				await ctx.send(embed=em)
+		elif page == "7":
+				em = discord.Embed(title='Misc Roles',
+													description=f'{miscROLE}',
+													color=discord.Color.blue())
+				await ctx.respond()
+				await ctx.send(embed=em)
+		elif page == "8":
+				em = discord.Embed(title='Leaderboard Topper Roles',
+													description=f'{leaderboardToppers}',
+													color=discord.Color.red())
+				await ctx.respond()
+				await ctx.send(embed=em)
+		elif page == "9":
+				em = discord.Embed(title='Member Roles',
+													description=f'{memberRolesROLE}',
+													color=discord.Color.blue())
+				await ctx.respond()
+				await ctx.send(embed=em)
+		elif page == "10":
+				em = discord.Embed(title='Ping Roles',
+													description=f'{pingsROLE}',
+													color=discord.Color.blue())
+				await ctx.respond()
+				await ctx.send(embed=em)
+
+
+				
 
 @client.command(aliases=['donate', 'transfer', 'give'])
 @commands.has_permissions(administrator=True)
@@ -539,7 +629,7 @@ async def roleinfo(ctx, page=1):
 				await ctx.send(embed=em)
 		elif page == 11:
 				em = discord.Embed(title = "Ping Roles",
-													description = "x",
+													description = f"{pingsROLE}",
 													color = discord.Color.gray())
 		else:
 				await ctx.send(

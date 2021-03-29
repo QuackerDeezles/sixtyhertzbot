@@ -123,3 +123,11 @@ leaderboardToppers = """
 <@&809470490275741746> Diamond Topper
 <@&809470388915404817> Star Topper
 """
+
+pingsROLE = """
+<@&802157960180662292> Get pinged for general announcements
+<@&807781898495197235> Get pinged for new giveaways! 
+<@&803450408676491264> Get pinged for MoonFrost's uploads on YouTube
+<@&803450292209057882> Get pinged for MoonFrost's live streams on Twitch
+<@&811795170516533278> Get pinged for latest 60hz Gang list updates
+"""
