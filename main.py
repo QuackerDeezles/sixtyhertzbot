@@ -71,17 +71,7 @@ async def _gdshop(ctx): # Defines a new "context" (ctx) command called "ping."
                     value=gdshopGoldToken)
     await ctx.send(embed=embed)
 
-@slash.slash(name="shop", 
-            description="Shows the current token shop.",
-            guild_ids=guild_ids)
-async def _gdshop(ctx): # Defines a new "context" (ctx) command called "ping."
-    
-    await ctx.respond()
-    embed = discord.Embed(title='60hz Gang Shop', color=discord.Color.purple())
-    embed.add_field(name='Normal Shop', value=gdshopToken)
-    embed.add_field(name='Special Shop (1 Gold Token Each)',
-                    value=gdshopGoldToken)
-    await ctx.send(embed=embed) 
+
 
 @client.command(aliases=['shop', '60hzshop'])
 async def gdshop(ctx):
