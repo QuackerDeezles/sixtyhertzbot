@@ -557,7 +557,7 @@ async def give_tokens_error(ctx, error):
         )
     elif isinstance(error, commands.MissingPermissions):
         await ctx.send(
-            "You do not have the required permissions to use this command.")
+            ":x: You do not have the required permissions to use this command.")
     else:
         await ctx.send(error)
 
