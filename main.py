@@ -981,23 +981,23 @@ async def setup_warns(member,json_files):
 @client.command()
 @commands.has_permissions(manage_messages = True)
 async def warn(ctx,member : discord.Member = None, *, reason = None):
-  if not reason:
-    reason = "None"
-  if not member:
-    return await ctx.send("Invalid Command Usage. Remember to do `%warn <member> (optional reason`")
-  
-  em = discord.Embed(title = "Member Warn", color = discord.Color.blue())
-  em.add_field(name = "__Member Warned__", value = f"\n**Name:** {member}\n**ID:** {member.id}", inline = True)
-  em.add_field(name = "__Moderator__", value = f"\n**Name:** {ctx.author}\n**ID:** {ctx.author.id}", inline = True)
-  em.add_field(name = "__Reason__", value = f"{reason}", inline = False)
-  with open('warns.json','r') as f:
-    warns = json.load(f)
-  await setup_warns(member,warns)
-  await add_warns(member,warns,reason)
-  em.timestamp = ctx.message.created_at
-  with open('warns.json','w') as f:
-    json.dump(warns,f,indent=4)
-  await ctx.send(embed = em)
+	if not reason:
+		reason = "None"
+	if not member:
+		return await ctx.send("Invalid Command Usage. Remember to do `%warn <member> (optional reason`")
+	
+	em = discord.Embed(title = "Member Warn", color = discord.Color.blue())
+	em.add_field(name = "__Member Warned__", value = f"\n**Name:** {member}\n**ID:** {member.id}", inline = True)
+	em.add_field(name = "__Moderator__", value = f"\n**Name:** {ctx.author}\n**ID:** {ctx.author.id}", inline = True)
+	em.add_field(name = "__Reason__", value = f"{reason}", inline = False)
+	with open('warns.json','r') as f:
+		warns = json.load(f)
+	await setup_warns(member,warns)
+	await add_warns(member,warns,reason)
+	em.timestamp = ctx.message.created_at
+	with open('warns.json','w') as f:
+		json.dump(warns,f,indent=4)
+	await ctx.send(embed = em)
 	await member.send(f"You were warned for **{}**".format(reason))
 @client.command()
 @commands.has_permissions(manage_messages = True)
