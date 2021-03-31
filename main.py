@@ -1012,7 +1012,7 @@ async def clearwarns(ctx,member : discord.Member = None):
 	with open('warns.json','w') as f:
 		json.dump(warns,f,indent=4)
 	await ctx.send(f"All the warns for **{member}** were cleared! ")
-	await member.send("All your warns were cleared")
+	await member.send("**All your warns were cleared**")
 
 @client.command()
 @commands.has_permissions(manage_messages = True)
@@ -1027,7 +1027,7 @@ async def deletewarn(ctx,member : discord.Member = None, warn_number : int = Non
 	with open('warns.json','w') as f:
 		json.dump(warns,f,indent=4)
 	await ctx.send(f"Warn {warn_number} was cleared for **{member}**")
-	await member.send(f"Warn {warn_number} was cleared for you. You now have {warnsNumber}")
+	await member.send(f"**Warn {warn_number}** was cleared for you. You now have **{warnsNumber} warns**.")
 
 
 async def get_warn_info(member,json_files):
