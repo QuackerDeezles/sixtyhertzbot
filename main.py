@@ -998,35 +998,35 @@ async def warn(ctx,member : discord.Member = None, *, reason = None):
 	with open('warns.json','w') as f:
 		json.dump(warns,f,indent=4)
 	await ctx.send(embed = em)
-	await member.send(f"You were warned for **{}**".format(reason))
+	await member.send("You were warned for **{}**".format(reason))
 @client.command()
 @commands.has_permissions(manage_messages = True)
 async def clearwarns(ctx,member : discord.Member = None):
-  if not member:
-    return await ctx.send("Invalid Command Usage. Remember to do `%clear_warns <@member>`")
-  
-  with open('warns.json','r') as f:
-    warns = json.load(f)
-  await setup_warns(member,warns)
-  warns[str(member.guild.id)][str(member.id)]["warns"].clear()
-  with open('warns.json','w') as f:
-    json.dump(warns,f,indent=4)
-  await ctx.send(f"All the warns for **{member}** were cleared! ")
+	if not member:
+		return await ctx.send("Invalid Command Usage. Remember to do `%clear_warns <@member>`")
+	
+	with open('warns.json','r') as f:
+		warns = json.load(f)
+	await setup_warns(member,warns)
+	warns[str(member.guild.id)][str(member.id)]["warns"].clear()
+	with open('warns.json','w') as f:
+		json.dump(warns,f,indent=4)
+	await ctx.send(f"All the warns for **{member}** were cleared! ")
 	await member.send("All your warns were cleared")
 
 @client.command()
 @commands.has_permissions(manage_messages = True)
 async def deletewarn(ctx,member : discord.Member = None, warn_number : int = None):
-  if not member or not warn_number:
-    return await ctx.send("Invalid Command Usage. Remember to do `%delete_warn <@member> <number>`")
-  with open('warns.json','r') as f:
-    warns = json.load(f)
-  await setup_warns(member,warns)
-  warns[str(member.guild.id)][str(member.id)]["warns"].pop(warn_number - 1)
+	if not member or not warn_number:
+		return await ctx.send("Invalid Command Usage. Remember to do `%delete_warn <@member> <number>`")
+	with open('warns.json','r') as f:
+		warns = json.load(f)
+	await setup_warns(member,warns)
+	warns[str(member.guild.id)][str(member.id)]["warns"].pop(warn_number - 1)
 	warnsNumber = len(warns[str(member.guild.id)][str(member.id)]["warns"])
-  with open('warns.json','w') as f:
-    json.dump(warns,f,indent=4)
-  await ctx.send(f"Warn {warn_number} was cleared for **{member}**")
+	with open('warns.json','w') as f:
+		json.dump(warns,f,indent=4)
+	await ctx.send(f"Warn {warn_number} was cleared for **{member}**")
 	await member.send(f"Warn {warn_number} was cleared for you. You now have {warnsNumber}")
 
 
