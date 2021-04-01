@@ -894,7 +894,7 @@ async def on_ready():
         activity=discord.Activity(
             type=discord.ActivityType.streaming,
             name=f"Geometry Dash",
-            url='https://www.youtube.com/watch?v=c9na_ojJRuI'))
+            url='https://www.youtube.com/watch?v=dQw4w9WgXcQ'))
     
 
 
