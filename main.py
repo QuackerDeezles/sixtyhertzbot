@@ -4,7 +4,7 @@ import os
 import json
 import datetime
 import asyncio
-from replit import db
+from repl.it import db
 
 from mooncanedit import gdshopToken, gdshopGoldToken, list_desc, competition_info
 from roleStuff import demonsROLE, gdrolesROLE, pointercrateROLE, competitionROLE, collabROLE, moderationsROLE, perksROLE, miscROLE, memberRolesROLE, leaderboardToppers, pingsROLE
