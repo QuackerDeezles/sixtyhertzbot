@@ -649,58 +649,63 @@ async def role_info_error(ctx, error):
 
 @client.command(aliases=['lb'])
 async def leaderboard(ctx, num=10):
-    print('function loaded')
-    #guild = ctx.guild
-    if num <= 25:
+	print('function loaded')
+	#guild = ctx.guild
+	if num <= 25:
 
-        with open('tokens.json', 'r') as f:
-            users = json.load(f)
-        leaderboard = {}
-        total = []
-        userlist = list(users)
-        addedPoint = cycle([0.1, 0.15, 0.2, 0,25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
-        for mem in userlist:
-            name = int(mem)  # getting member.id in int form
-            token = users[mem]['tokens']  # number of tokens someone has
-            new_token = token + next(addedPoint)
-            leaderboard[
-                new_token] = name  # Allows someone to get name of person with x tokens
-            total.append(new_token)  # adding token values of all users
-        total = sorted(total, reverse=True)  # sorting tokens greatest to least
-        em = discord.Embed(title='Tokens Leaderboard',
-                           color=discord.Color.blue())
-        idx = 1
-        for data in total:
-            if num <= 10:
+		with open('tokens.json', 'r') as f:
+				users = json.load(f)
+		leaderboard = {}
+		total = []
+		userlist = list(users)
+		addedPoint = cycle([0.1, 0.15, 0.2, 0,25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+		for mem in userlist:
+				name = int(mem)  # getting member.id in int form
+				token = users[mem]['tokens']  # number of tokens someone has
+				new_token = token + next(addedPoint)
+				leaderboard[
+						new_token] = name  # Allows someone to get name of person with x tokens
+				total.append(new_token)  # adding token values of all users
+		total = sorted(total, reverse=True)  # sorting tokens greatest to least
+		em = discord.Embed(title='Tokens Leaderboard',
+												color=discord.Color.blue())
+		idx = 1
+		for data in total:
+				if num <= 10:
 
-                id_ = leaderboard[data]
-                mem = client.get_user(id_)
-                LVL = users[str(mem.id)]['gold tokens']
-                name = mem.name
-                em.add_field(
-                    name=f"{idx}. {name}",
-                    value=f"`{int(data)} Tokens` | *{LVL}*  Gold Tokens  ",
-                    inline=False)
-                if idx == num:
-                    break
-                else:
-                    idx += 1
-            else:
-                id_ = leaderboard[data]
-                mem = client.get_user(id_)
-                LVL = users[str(mem.id)]['gold tokens']
-                name = mem.name
-                em.add_field(
-                    name=f"{idx}. {name}",
-                    value=f"`{int(data)} Tokens` | *{LVL}*  Gold Tokens  ",
-                    inline=False)
-                if idx == num:
-                    break
-                else:
-                    idx += 1
-        await ctx.send(embed=em)
-    else:
-        await ctx.send("That's too many people to display at once!")
+						id_ = leaderboard[data]
+						
+						mem = client.get_user(id_)
+						if not mem:
+							mem = await client.fetch_user(id_)
+						LVL = users[str(mem.id)]['gold tokens']
+						name = mem.name
+						em.add_field(
+								name=f"{idx}. {name}",
+								value=f"`{int(data)} Tokens` | *{LVL}*  Gold Tokens  ",
+								inline=False)
+						if idx == num:
+								break
+						else:
+								idx += 1
+				else:
+						id_ = leaderboard[data]
+						mem = client.get_user(id_)
+						if not mem:
+							mem = await client.fetch_user(id_)
+						LVL = users[str(mem.id)]['gold tokens']
+						name = mem.name
+						em.add_field(
+								name=f"{idx}. {name}",
+								value=f"`{int(data)} Tokens` | *{LVL}*  Gold Tokens  ",
+								inline=False)
+						if idx == num:
+								break
+						else:
+								idx += 1
+		await ctx.send(embed=em)
+	else:
+		await ctx.send("That's too many people to display at once!")
 
 
 @client.command()
