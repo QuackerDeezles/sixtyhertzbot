@@ -7,6 +7,7 @@ gdshopToken = """
 :coin: Collab Layout Part - 15 tokens (+5 tokens for top quality)
 :coin: Collab Deco Part - 75 tokens (+25 tokens for top quality)
 :coin: Edited GD Video - 10 tokens per minute of final video
+:coin: Free Basic Fiverr Gig (Normally $5) - 100 tokens
 """
 
 # Shop for Gold Token 

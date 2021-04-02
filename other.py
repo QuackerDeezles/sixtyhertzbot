@@ -966,19 +966,19 @@ async def remove_suggestion_error(ctx, error):
             "You do not have the required permissions to use this command.")
     else:
         raise error
-async def add_warns(member,reason):
-  db[str(member.guild.id)][str(member.id)]["warns"].append({"reason" : reason, "time" : datetime.datetime.now().strftime("%B %d, %Y  %I: %M %p UTC")})
+async def add_warns(member,json_files,reason):
+  json_files[str(member.guild.id)][str(member.id)]["warns"].append({"reason" : reason, "time" : datetime.datetime.now().strftime("%B %d, %Y  %I: %M %p UTC")})
 
-async def setup_warns(member,db):
-  if not str(member.guild.id) in db.keys():
+async def setup_warns(member,json_files):
+  if not str(member.guild.id) in json_files:
     print("True 1")
-    db[str(member.guild.id)] = {}
-  if not str(member.id) in db[str(member.guild.id)]:
+    json_files[str(member.guild.id)] = {}
+  if not str(member.id) in json_files[str(member.guild.id)]:
 
-    db[str(member.guild.id)][str(member.id)] = {}
-  if not "warns" in db[str(member.guild.id)][str(member.id)]:
+    json_files[str(member.guild.id)][str(member.id)] = {}
+  if not "warns" in json_files[str(member.guild.id)][str(member.id)]:
 
-    db[str(member.guild.id)][str(member.id)]["warns"] = []
+    json_files[str(member.guild.id)][str(member.id)]["warns"] = []
 
 @client.command()
 @commands.has_permissions(manage_messages = True)
@@ -992,10 +992,13 @@ async def warn(ctx,member : discord.Member = None, *, reason = None):
 	em.add_field(name = "__Member Warned__", value = f"\n**Name:** {member}\n**ID:** {member.id}", inline = True)
 	em.add_field(name = "__Moderator__", value = f"\n**Name:** {ctx.author}\n**ID:** {ctx.author.id}", inline = True)
 	em.add_field(name = "__Reason__", value = f"{reason}", inline = False)
-
-	await setup_warns(member)
-	await add_warns(member,reason)
+	with open('warns.json','r') as f:
+		warns = json.load(f)
+	await setup_warns(member,warns)
+	await add_warns(member,warns,reason)
 	em.timestamp = ctx.message.created_at
+	with open('warns.json','w') as f:
+		json.dump(warns,f,indent=4)
 	await ctx.send(embed = em)
 	await member.send("You were warned for **{}**".format(reason))
 @client.command()
@@ -1004,9 +1007,12 @@ async def clearwarns(ctx,member : discord.Member = None):
 	if not member:
 		return await ctx.send("Invalid Command Usage. Remember to do `%clear_warns <@member>`")
 	
-
-	await setup_warns(member)
-	db[str(member.guild.id)][str(member.id)]["warns"].clear()
+	with open('warns.json','r') as f:
+		warns = json.load(f)
+	await setup_warns(member,warns)
+	warns[str(member.guild.id)][str(member.id)]["warns"].clear()
+	with open('warns.json','w') as f:
+		json.dump(warns,f,indent=4)
 	await ctx.send(f"All the warns for **{member}** were cleared! ")
 	await member.send("**All your warns were cleared**")
 
@@ -1020,13 +1026,15 @@ async def deletewarn(ctx,member : discord.Member = None, warn_number : int = Non
 	await setup_warns(member,warns)
 	warns[str(member.guild.id)][str(member.id)]["warns"].pop(warn_number - 1)
 	warnsNumber = len(warns[str(member.guild.id)][str(member.id)]["warns"])
+	with open('warns.json','w') as f:
+		json.dump(warns,f,indent=4)
 	await ctx.send(f"Warn {warn_number} was cleared for **{member}**")
 	await member.send(f"**Warn {warn_number}** was cleared for you. You now have **{warnsNumber} warns**.")
 
 
 async def get_warn_info(member,json_files):
-  list_of_warns = db[str(member.guild.id)][str(member.id)]["warns"]
-  print(db[str(member.guild.id)][str(member.id)]["warns"])  
+  list_of_warns = json_files[str(member.guild.id)][str(member.id)]["warns"]
+  print(json_files[str(member.guild.id)][str(member.id)]["warns"])  
   warn_list = ""
   reason_list = ""
   dates = ""
@@ -1047,9 +1055,10 @@ async def get_warn_info(member,json_files):
 async def infractions(ctx, member : discord.Member = None):
   if not member:
     member = ctx.author
-
-  await setup_warns(member)
-  info_list = await get_warn_info(member)
+  with open('warns.json','r') as f:
+    warns = json.load(f)
+  await setup_warns(member,warns)
+  info_list = await get_warn_info(member,warns)
   #warns = info_list[0]
   reasons = info_list[1]
   dates = info_list[2]
