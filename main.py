@@ -30,7 +30,7 @@ guild_ids = [782651282128896020,757383943116030074] # Put your server ID in this
 
 @slash.slash(name="ping", description="Returns the latency of the bot", guild_ids=guild_ids)
 async def _ping(ctx): # Defines a new "context" (ctx) command called "ping."
-    await ctx.respond()
+    #await ctx.respond()
     await ctx.send(f"Pong! ({int(client.latency*1000)}ms)")
 @slash.slash(name="wealth", 
             description="Displays your current wealth balance in tokens.",
@@ -43,7 +43,7 @@ async def _ping(ctx): # Defines a new "context" (ctx) command called "ping."
             guild_ids=guild_ids)
 async def _wealth(ctx, member = None): # Defines a new "context" (ctx) command called "ping."
     
-    await ctx.respond()
+    #await ctx.respond()
     if not member:
       member = ctx.author
     with open('tokens.json', 'r') as f:
@@ -65,7 +65,7 @@ async def _wealth(ctx, member = None): # Defines a new "context" (ctx) command c
             guild_ids=guild_ids)
 async def _gdshop(ctx): # Defines a new "context" (ctx) command called "ping."
     
-    await ctx.respond()
+    #await ctx.respond()
     embed = discord.Embed(title='60hz Gang Shop', color=discord.Color.purple())
     embed.add_field(name='Normal Shop', value=gdshopToken)
     embed.add_field(name='Special Shop (1 Gold Token Each)',
