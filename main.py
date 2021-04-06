@@ -1125,7 +1125,10 @@ async def rules(ctx, *, page: int = None):
 				elif page == 11:
 						ruledesc = 'If you have completed an Extreme Demon or a List Demon, it will not officially be believed unless there is video proof (and list points if it\'s a list demon)'
 						rulereason = 'Extreme Demons and Lists Demons are quite hard to complete which is why they will need some proof that you actually did it. Remember to never cheat!'
-				elif page >= 11:
+				elif page == 12:
+						ruledesc = 'No DM advertising'
+						rulereason = 'DM Advertising is annoying. If you want to advertise, there\'s an advertising channel where you can post your content if you are above level 5.'
+				elif page >= 13:
 					return await ctx.send("There are only 11 rules!")
 				
 				em = discord.Embed(
