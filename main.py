@@ -387,7 +387,7 @@ async def _rules(ctx, rule):
 				title=f'Rule {rule} | {ruledesc}',
 				description=f'\n\n__**Why is this a rule?**__\n\n{rulereason}',
 				color=discord.Color.green())
-		await ctx.respond()
+		#await ctx.respond()
 		await ctx.send(embed=em)
 
 @slash.slash(
@@ -420,61 +420,61 @@ async def _role(ctx, role):
 				em = discord.Embed(title='Demon Roles',
 														description=f'{demonsROLE}',
 														color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "2":
 				em = discord.Embed(title='GD/Self Roles',
 													description=f'Get these roles in <#797897371866234910> by reacting!\n{gdrolesROLE}',
 													color=discord.Color.red())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "3":
 				em = discord.Embed(title='Competition Roles',
 													description=f'{competitionROLE}',
 													color=discord.Color.green())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "4":
 				em = discord.Embed(title='Collaboration Roles',
 													description=f'{collabROLE}',
 													color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "5":
 				em = discord.Embed(title='Staff Roles',
 													description=f'{moderationsROLE}',
 													color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "6":
 				em = discord.Embed(title='Perk Roles :smirk: ',
 													description=f'{perksROLE}',
 													color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "7":
 				em = discord.Embed(title='Misc Roles',
 													description=f'{miscROLE}',
 													color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "8":
 				em = discord.Embed(title='Leaderboard Topper Roles',
 													description=f'{leaderboardToppers}',
 													color=discord.Color.red())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "9":
 				em = discord.Embed(title='Member Roles',
 													description=f'{memberRolesROLE}',
 													color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "10":
 				em = discord.Embed(title='Ping Roles',
 													description=f'{pingsROLE}',
 													color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 
 
