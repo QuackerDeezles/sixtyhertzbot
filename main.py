@@ -1137,6 +1137,27 @@ async def rules(ctx, *, page: int = None):
 						color=discord.Color.green())
 				await ctx.send(embed=em)
 
+@client.command()
+async def meetstaff(ctx, *, page: int = None):
+		staffname = ''
+		staffintro = ''
+		not_desc = 'Page **1**: QuackerDeezlesYT'
+		if not page:
+				em = discord.Embed(title='60hz Gang Staff Introductions',
+													description=not_desc,
+													color=discord.Color.green())
+				await ctx.send(embed=em)
+		else:
+
+				if page == 1:
+						staffname = 'QuackerDeezlesYT'
+						staffintro = 'Heyy! :ds_wave: I’m QuackerDeezles, a 13 year old asshole from the US, born on December 15. I love math, music (playing piano and percussion, listening to dubstep, and sometimes composing when I feel like it), puzzles, ducks :duck: , and of course, Geometry Dash! Many people don’t believe this but I have gotten my name a couple years ago while going to the city library. I started playing Geometry Dash around May 2015, and since then it’s my favorite video game. Other than that, I play skribbl.io and Fall Guys when I just want to take a break from GD.\n\nThe times I get on Discord are on and off, sometimes I have a shit-ton of homework and some days I barely have anything to do. My DM’s are open so feel free if you want to chat!\n\nOther than that, I don’t really have much else. Hope you have a great rest of your day!'
+				
+				em = discord.Embed(
+						title=f'{staffinfo}\'s Introducion',
+						description=f'{staffintro}',
+						color=discord.Color.green())
+				await ctx.send(embed=em)
 
 @client.command()
 async def server(ctx):
