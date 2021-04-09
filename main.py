@@ -215,7 +215,7 @@ async def _give(ctx,receiver,amount,token_type, reason):
     with open('tokens.json', 'w') as f:
       json.dump(users, f)
   else:
-      await ctx.respond(eat = True)
+      #await ctx.respond(eat = True)
       await ctx.send(content = "You do not have permission to use this command.", hidden=True)
 
 @slash.slash(name = "whisper",
@@ -316,7 +316,7 @@ async def _remove(ctx,receiver,amount, token_type, reason):
     with open('tokens.json', 'w') as f:
       json.dump(users, f)
   else:
-      await ctx.respond(eat = True)
+      #await ctx.respond(eat = True)
       await ctx.send(content = "You do not have permission to use this command.", hidden=True)
 
 @slash.slash(
