@@ -13,7 +13,7 @@ from discord_slash import SlashCommand, SlashContext
 from itertools import cycle
 # from flask import Flask
 from discord_slash.utils import manage_commands
-
+from pymongo import MongoClient
 intents = discord.Intents.default()
 intents.members = True
 intents.messages = True
@@ -26,6 +26,21 @@ redloading = '<a:red_loading:805930785919467521>'
 
 
 guild_ids = [782651282128896020,757383943116030074] # Put your server ID in this array.
+url = ''
+cluster = MongoClient(url)
+db = cluster['discord']
+tokens = db['tokens']
+warns = db['warns']
+
+
+async def get_wealth_data(person):
+	getDoc = tokens.find_one({"_id" : person.id})
+	if not getDoc:
+		return {"tokens" : 0, "gold tokens" : 0}
+	else:
+		regularTokens = getDoc['wealth']['RegularTokens']
+		goldTokens = getDoc['wealth']['GoldTokens']
+		return {"tokens" : regularTokens, "gold tokens" : goldTokens}
 
 
 @slash.slash(name="ping", description="Returns the latency of the bot", guild_ids=guild_ids)
@@ -43,22 +58,19 @@ async def _ping(ctx): # Defines a new "context" (ctx) command called "ping."
             guild_ids=guild_ids)
 async def _wealth(ctx, member = None): # Defines a new "context" (ctx) command called "ping."
     
-    #await ctx.respond()
-    if not member:
-      member = ctx.author
-    with open('tokens.json', 'r') as f:
-        users = json.load(f)
-    await open_account(users, member)
-    tokens = users[str(member.id)]['tokens']
-    goldtokens = users[str(member.id)]['gold tokens']
-    with open('tokens.json', 'w') as f:
-        json.dump(users, f)
-    desc = f":coin: **Tokens:** {tokens} \n{GOLD_TOKEN_EMOJI} **Gold Tokens:** {goldtokens}  "
-    em = discord.Embed(title='Token Wealth',
-                       description=desc,
-                       color=discord.Color.green())
-    em.set_author(name=member.name, icon_url=member.avatar_url)
-    await ctx.send(embed=em)
+		if not member:
+				person = ctx.author
+		tokendata = await get_wealth_data(person)
+		
+		tokens = tokendata['tokens']
+		goldtokens = tokendata['gold tokens']
+		
+		desc = f":coin: **Tokens:** {tokens} \n{GOLD_TOKEN_EMOJI} **Gold Tokens:** {goldtokens}  "
+		em = discord.Embed(title=f'Token Wealth',
+												description=desc,
+												color=discord.Color.green())
+		em.set_author(name=person.name, icon_url=person.avatar_url)
+		await ctx.send(embed=em)
 
 @slash.slash(name="shop", 
             description="Shows the current token shop.",
@@ -82,17 +94,17 @@ async def gdshop(ctx):
                     value=gdshopGoldToken)
     await ctx.send(embed=embed)
 
+
+
 @client.command(aliases=['bal', 'balance'])
 async def wealth(ctx, *, person: discord.Member = None):
     if not person:
         person = ctx.author
-    with open('tokens.json', 'r') as f:
-        users = json.load(f)
-    await open_account(users, person)
-    tokens = users[str(person.id)]['tokens']
-    goldtokens = users[str(person.id)]['gold tokens']
-    with open('tokens.json', 'w') as f:
-        json.dump(users, f)
+    tokendata = await get_wealth_data(person)
+    
+    tokens = tokendata['tokens']
+    goldtokens = tokendata['gold tokens']
+    
     desc = f":coin: **Tokens:** {tokens} \n{GOLD_TOKEN_EMOJI} **Gold Tokens:** {goldtokens}  "
     em = discord.Embed(title=f'Token Wealth',
                        description=desc,
@@ -169,16 +181,41 @@ getHelpMenudesc = """
   guild_ids=guild_ids
   #channel_ids = [805878707012108288,759974319799140412]
   )
+
+
+async def change_coins(receiver, amount, tokenType):
+	getDoc = tokens.find_one({"_id" : receiver.id})
+	typeToken = ""
+	if tokenType == 'gold tokens':
+		typeToken = "GoldTokens"
+	elif tokenType == 'tokens':
+		typeToken = "RegularTokens"
+	else:
+		return None
+	if not getDoc:
+		data = {
+			"RegularTokens" : 0,
+			"GoldTokens" : 0
+		}
+		tokens.insert_one({"_id" : receiver.id, "wealth" : data}) # insert original data (unnesccary technically, but it's ok)
+		
+		
+		data[typeToken] += amount # Update number based on datatype
+		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}}) # db update
+	else:
+		data = getDoc['wealth']
+		data[tokenType] += amount
+		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}})
+
 async def _give(ctx,receiver,amount,token_type, reason):
   if ctx.author.guild_permissions.administrator:
 
-    #await ctx.respond()
+    
     tokenlog = client.get_channel(805951549653778473)
-    with open('tokens.json', 'r') as f:
-        users = json.load(f)
-    await open_account(users, receiver)
+    
+    #await open_account(users, receiver)
     if token_type.lower() == 'gold tokens':
-      await change_tokens(users, receiver, amount, 'gold tokens')
+      await change_tokens(receiver, amount, 'gold tokens')
       em = discord.Embed(
           title=f'{verifiedEMOJI} Successful Transfer',
           color=discord.Color.green())
@@ -196,7 +233,7 @@ async def _give(ctx,receiver,amount,token_type, reason):
           f"**{ctx.author.name}** has added **{amount} gold tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
     )
     else:
-      await change_tokens(users, receiver, amount, 'tokens')
+      await change_tokens(receiver, amount, 'tokens')
       em = discord.Embed(
           title=f'{verifiedEMOJI} Successful Transfer',
           color=discord.Color.green())
@@ -212,10 +249,9 @@ async def _give(ctx,receiver,amount,token_type, reason):
       await tokenlog.send(
           f"**{ctx.author.name}** has added **{amount} regular tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
       )
-    with open('tokens.json', 'w') as f:
-      json.dump(users, f)
+    
   else:
-      await ctx.respond(eat = True)
+      
       await ctx.send(content = "You do not have permission to use this command.", hidden=True)
 
 @slash.slash(name = "whisper",
@@ -229,7 +265,7 @@ async def _give(ctx,receiver,amount,token_type, reason):
   )
  ])
 async def _secret(ctx, message):
-  #await ctx.respond(eat=True)  # Again, this is optional, but still recommended to.
+  await ctx.respond(eat=True)  # Again, this is optional, but still recommended to.
   await ctx.send(content = f"{message}", hidden=True)
 
 @slash.slash(
@@ -270,13 +306,11 @@ async def _secret(ctx, message):
 async def _remove(ctx,receiver,amount, token_type, reason):
   if ctx.author.guild_permissions.administrator:
 
-    #await ctx.respond()
+    
     tokenlog = client.get_channel(805951549653778473)
-    with open('tokens.json', 'r') as f:
-        users = json.load(f)
-    await open_account(users, receiver)
+    
     if token_type.lower() == 'gold tokens':
-      await change_tokens(users, receiver, amount * -1, 'gold tokens')
+      await change_tokens(receiver, amount * -1, 'gold tokens')
       em = discord.Embed(
           title=f'{verifiedEMOJI} Successful Transfer',
           color=discord.Color.green())
@@ -296,7 +330,7 @@ async def _remove(ctx,receiver,amount, token_type, reason):
       )
     
     else:
-      await change_tokens(users, receiver, amount * -1, 'tokens')
+      await change_tokens(receiver, amount * -1, 'tokens')
       em = discord.Embed(
           title=f'{verifiedEMOJI} Successful Transfer',
           color=discord.Color.green())
@@ -313,10 +347,8 @@ async def _remove(ctx,receiver,amount, token_type, reason):
       await tokenlog.send(
           f"**{ctx.author.name}** has removed **{amount} regular tokens** from **{receiver.name}**'s 60hz Competition Balance"
       )
-    with open('tokens.json', 'w') as f:
-      json.dump(users, f)
+
   else:
-      await ctx.respond(eat = True)
       await ctx.send(content = "You do not have permission to use this command.", hidden=True)
 
 @slash.slash(
@@ -652,9 +684,8 @@ async def leaderboard(ctx, num=10):
 	print('function loaded')
 	#guild = ctx.guild
 	if num <= 25:
-
-		with open('tokens.json', 'r') as f:
-				users = json.load(f)
+		
+		
 		leaderboard = {}
 		total = []
 		userlist = list(users)
@@ -663,8 +694,7 @@ async def leaderboard(ctx, num=10):
 				name = int(mem)  # getting member.id in int form
 				token = users[mem]['tokens']  # number of tokens someone has
 				new_token = token + next(addedPoint)
-				leaderboard[
-						new_token] = name  # Allows someone to get name of person with x tokens
+				leaderboard[new_token] = name  # Allows someone to get name of person with x tokens
 				total.append(new_token)  # adding token values of all users
 		total = sorted(total, reverse=True)  # sorting tokens greatest to least
 		em = discord.Embed(title='Tokens Leaderboard',
@@ -799,11 +829,7 @@ async def links(ctx):
     await ctx.send(embed=em)
 
 
-async def open_account(users, user):
-    if str(user.id) not in users:
-        users[str(user.id)] = {}
-        users[str(user.id)]['tokens'] = 0
-        users[str(user.id)]['gold tokens'] = 0
+
 
 
 async def change_tokens(users, user, amount, typeToken):
