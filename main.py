@@ -762,6 +762,9 @@ async def leaderboard(ctx, num=10):
 	else:
 		await ctx.send("That's too many people to display at once!")
 
+@leaderboard.error
+async def leaderboard_error(ctx,error):
+	await ctx.send(error)
 
 @client.command()
 async def remove(ctx, receiver: discord.Member, *, removed: int):
