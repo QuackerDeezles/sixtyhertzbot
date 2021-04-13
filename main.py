@@ -705,26 +705,28 @@ async def leaderboard(ctx, num=10):
 	print('function loaded')
 	#guild = ctx.guild
 	if num <= 25:
-		collections = tokens.find()
-		userlist = []
-		for doc in collections:
-			userlist.append(str(doc['_id']))
-		leaderboard = {}
-		total = []
-		
-		addedPoint = cycle([0.1, 0.15, 0.2, 0,25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
-		for mem in userlist:
-				document = tokens.find_one({"_id" : int(mem)})
-				name = int(mem)  # getting member.id in int form
-				token = document['wealth']['RegularTokens']  # number of tokens someone has
-				new_token = token + next(addedPoint)
-				leaderboard[new_token] = name  # Allows someone to get name of person with x tokens
-				total.append(new_token)  # adding token values of all users
-		total = sorted(total, reverse=True)  # sorting tokens greatest to least
-		em = discord.Embed(title='Tokens Leaderboard',
-												color=discord.Color.blue())
-		idx = 1
 		async with ctx.typing():
+
+			collections = tokens.find()
+			userlist = []
+			for doc in collections:
+				userlist.append(str(doc['_id']))
+			leaderboard = {}
+			total = []
+			
+			addedPoint = cycle([0.1, 0.15, 0.2, 0,25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+			for mem in userlist:
+					document = tokens.find_one({"_id" : int(mem)})
+					name = int(mem)  # getting member.id in int form
+					token = document['wealth']['RegularTokens']  # number of tokens someone has
+					new_token = token + next(addedPoint)
+					leaderboard[new_token] = name  # Allows someone to get name of person with x tokens
+					total.append(new_token)  # adding token values of all users
+			total = sorted(total, reverse=True)  # sorting tokens greatest to least
+			em = discord.Embed(title='Tokens Leaderboard',
+													color=discord.Color.blue())
+			idx = 1
+			
 
 			for data in total:
 					if num <= 10:
