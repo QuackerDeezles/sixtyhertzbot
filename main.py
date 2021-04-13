@@ -713,7 +713,7 @@ async def leaderboard(ctx, num=10):
 		
 		addedPoint = cycle([0.1, 0.15, 0.2, 0,25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
 		for mem in userlist:
-				document = tokens.find_one("_id" : int(mem))
+				document = tokens.find_one({"_id" : int(mem)})
 				name = int(mem)  # getting member.id in int form
 				token = document['wealth']['RegularTokens']  # number of tokens someone has
 				new_token = token + next(addedPoint)
