@@ -705,7 +705,7 @@ async def leaderboard(ctx, num=10):
 	print('function loaded')
 	#guild = ctx.guild
 	if num <= 25:
-		collections = tokens.find().explain()
+		collections = tokens.find()
 		userlist = []
 		for doc in collections:
 			userlist.append(str(doc['_id']))
@@ -724,40 +724,42 @@ async def leaderboard(ctx, num=10):
 		em = discord.Embed(title='Tokens Leaderboard',
 												color=discord.Color.blue())
 		idx = 1
-		for data in total:
-				if num <= 10:
+		async with ctx.typing():
 
-						id_ = leaderboard[data] 
-						getMemberInfoWithID = tokens.find_one({"_id" : id_})
-						mem = client.get_user(id_)
-						if not mem:
-							mem = await client.fetch_user(id_)
-						goldToken = getMemberInfoWithID['wealth']['GoldTokens']
-						name = mem.name
-						em.add_field(
-								name=f"{idx}. {name}",
-								value=f"`{int(data)} Tokens` | *{goldToken}*  Gold Tokens  ",
-								inline=False)
-						if idx == num:
-								break
-						else:
-								idx += 1
-				else:
-						id_ = leaderboard[data]
-						getMemberInfoWithID = tokens.find_one({"_id" : id_})
-						mem = client.get_user(id_)
-						if not mem:
-							mem = await client.fetch_user(id_)
-						goldToken = getMemberInfoWithID['wealth']['GoldTokens']
-						name = mem.name
-						em.add_field(
-								name=f"{idx}. {name}",
-								value=f"`{int(data)} Tokens` | *{goldToken}*  Gold Tokens  ",
-								inline=False)
-						if idx == num:
-								break
-						else:
-								idx += 1
+			for data in total:
+					if num <= 10:
+
+							id_ = leaderboard[data] 
+							getMemberInfoWithID = tokens.find_one({"_id" : id_})
+							mem = client.get_user(id_)
+							if not mem:
+								mem = await client.fetch_user(id_)
+							goldToken = getMemberInfoWithID['wealth']['GoldTokens']
+							name = mem.name
+							em.add_field(
+									name=f"{idx}. {name}",
+									value=f"`{int(data)} Tokens` | *{goldToken}*  Gold Tokens  ",
+									inline=False)
+							if idx == num:
+									break
+							else:
+									idx += 1
+					else:
+							id_ = leaderboard[data]
+							getMemberInfoWithID = tokens.find_one({"_id" : id_})
+							mem = client.get_user(id_)
+							if not mem:
+								mem = await client.fetch_user(id_)
+							goldToken = getMemberInfoWithID['wealth']['GoldTokens']
+							name = mem.name
+							em.add_field(
+									name=f"{idx}. {name}",
+									value=f"`{int(data)} Tokens` | *{goldToken}*  Gold Tokens  ",
+									inline=False)
+							if idx == num:
+									break
+							else:
+									idx += 1
 		await ctx.send(embed=em)
 	else:
 		await ctx.send("That's too many people to display at once!")
