@@ -705,7 +705,7 @@ async def leaderboard(ctx, num=10):
 	print('function loaded')
 	#guild = ctx.guild
 	if num <= 25:
-		collections = tokens.find()
+		collections = tokens.find().explain()
 		userlist = []
 		for doc in collections:
 			userlist.append(str(doc['_id']))
