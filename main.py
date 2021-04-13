@@ -13,7 +13,7 @@ from discord_slash import SlashCommand, SlashContext
 from itertools import cycle
 # from flask import Flask
 from discord_slash.utils import manage_commands
-
+from pymongo import MongoClient
 intents = discord.Intents.default()
 intents.members = True
 intents.messages = True
@@ -26,6 +26,22 @@ redloading = '<a:red_loading:805930785919467521>'
 
 
 guild_ids = [782651282128896020,757383943116030074] # Put your server ID in this array.
+
+url = os.getenv("MONGO")
+cluster = MongoClient(url)
+db = cluster['discord']
+tokens = db['tokens']
+warns = db['warns']
+
+
+async def get_wealth_data(person):
+	getDoc = tokens.find_one({"_id" : person.id})
+	if not getDoc:
+		return {"tokens" : 0, "gold tokens" : 0}
+	else:
+		regularTokens = getDoc['wealth']['RegularTokens']
+		goldTokens = getDoc['wealth']['GoldTokens']
+		return {"tokens" : regularTokens, "gold tokens" : goldTokens}
 
 
 @slash.slash(name="ping", description="Returns the latency of the bot", guild_ids=guild_ids)
@@ -43,22 +59,19 @@ async def _ping(ctx): # Defines a new "context" (ctx) command called "ping."
             guild_ids=guild_ids)
 async def _wealth(ctx, member = None): # Defines a new "context" (ctx) command called "ping."
     
-    #await ctx.respond()
-    if not member:
-      member = ctx.author
-    with open('tokens.json', 'r') as f:
-        users = json.load(f)
-    await open_account(users, member)
-    tokens = users[str(member.id)]['tokens']
-    goldtokens = users[str(member.id)]['gold tokens']
-    with open('tokens.json', 'w') as f:
-        json.dump(users, f)
-    desc = f":coin: **Tokens:** {tokens} \n{GOLD_TOKEN_EMOJI} **Gold Tokens:** {goldtokens}  "
-    em = discord.Embed(title='Token Wealth',
-                       description=desc,
-                       color=discord.Color.green())
-    em.set_author(name=member.name, icon_url=member.avatar_url)
-    await ctx.send(embed=em)
+		if not member:
+				person = ctx.author
+		tokendata = await get_wealth_data(person)
+		
+		tokens = tokendata['tokens']
+		goldtokens = tokendata['gold tokens']
+		
+		desc = f":coin: **Tokens:** {tokens} \n{GOLD_TOKEN_EMOJI} **Gold Tokens:** {goldtokens}  "
+		em = discord.Embed(title=f'Token Wealth',
+												description=desc,
+												color=discord.Color.green())
+		em.set_author(name=person.name, icon_url=person.avatar_url)
+		await ctx.send(embed=em)
 
 @slash.slash(name="shop", 
             description="Shows the current token shop.",
@@ -82,17 +95,17 @@ async def gdshop(ctx):
                     value=gdshopGoldToken)
     await ctx.send(embed=embed)
 
+
+
 @client.command(aliases=['bal', 'balance'])
 async def wealth(ctx, *, person: discord.Member = None):
     if not person:
         person = ctx.author
-    with open('tokens.json', 'r') as f:
-        users = json.load(f)
-    await open_account(users, person)
-    tokens = users[str(person.id)]['tokens']
-    goldtokens = users[str(person.id)]['gold tokens']
-    with open('tokens.json', 'w') as f:
-        json.dump(users, f)
+    tokendata = await get_wealth_data(person)
+    
+    tokens = tokendata['tokens']
+    goldtokens = tokendata['gold tokens']
+    
     desc = f":coin: **Tokens:** {tokens} \n{GOLD_TOKEN_EMOJI} **Gold Tokens:** {goldtokens}  "
     em = discord.Embed(title=f'Token Wealth',
                        description=desc,
@@ -169,16 +182,41 @@ getHelpMenudesc = """
   guild_ids=guild_ids
   #channel_ids = [805878707012108288,759974319799140412]
   )
+
+
+async def change_tokens(receiver, amount, tokenType):
+	getDoc = tokens.find_one({"_id" : receiver.id})
+	typeToken = ""
+	if tokenType == 'gold tokens':
+		typeToken = "GoldTokens"
+	elif tokenType == 'tokens':
+		typeToken = "RegularTokens"
+	else:
+		return None
+	if not getDoc:
+		data = {
+			"RegularTokens" : 0,
+			"GoldTokens" : 0
+		}
+		tokens.insert_one({"_id" : receiver.id, "wealth" : data}) # insert original data (unnesccary technically, but it's ok)
+		
+		
+		data[typeToken] += amount # Update number based on datatype
+		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}}) # db update
+	else:
+		data = getDoc['wealth']
+		data[tokenType] += amount
+		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}})
+
 async def _give(ctx,receiver,amount,token_type, reason):
   if ctx.author.guild_permissions.administrator:
 
-    #await ctx.respond()
+    
     tokenlog = client.get_channel(805951549653778473)
-    with open('tokens.json', 'r') as f:
-        users = json.load(f)
-    await open_account(users, receiver)
+    
+    #await open_account(users, receiver)
     if token_type.lower() == 'gold tokens':
-      await change_tokens(users, receiver, amount, 'gold tokens')
+      await change_tokens(receiver, amount, 'gold tokens')
       em = discord.Embed(
           title=f'{verifiedEMOJI} Successful Transfer',
           color=discord.Color.green())
@@ -196,7 +234,7 @@ async def _give(ctx,receiver,amount,token_type, reason):
           f"**{ctx.author.name}** has added **{amount} gold tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
     )
     else:
-      await change_tokens(users, receiver, amount, 'tokens')
+      await change_tokens(receiver, amount, 'tokens')
       em = discord.Embed(
           title=f'{verifiedEMOJI} Successful Transfer',
           color=discord.Color.green())
@@ -212,10 +250,9 @@ async def _give(ctx,receiver,amount,token_type, reason):
       await tokenlog.send(
           f"**{ctx.author.name}** has added **{amount} regular tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
       )
-    with open('tokens.json', 'w') as f:
-      json.dump(users, f)
+    
   else:
-      #await ctx.respond(eat = True)
+      
       await ctx.send(content = "You do not have permission to use this command.", hidden=True)
 
 @slash.slash(name = "whisper",
@@ -229,7 +266,7 @@ async def _give(ctx,receiver,amount,token_type, reason):
   )
  ])
 async def _secret(ctx, message):
-  #await ctx.respond(eat=True)  # Again, this is optional, but still recommended to.
+  await ctx.respond(eat=True)  # Again, this is optional, but still recommended to.
   await ctx.send(content = f"{message}", hidden=True)
 
 @slash.slash(
@@ -270,13 +307,11 @@ async def _secret(ctx, message):
 async def _remove(ctx,receiver,amount, token_type, reason):
   if ctx.author.guild_permissions.administrator:
 
-    #await ctx.respond()
+    
     tokenlog = client.get_channel(805951549653778473)
-    with open('tokens.json', 'r') as f:
-        users = json.load(f)
-    await open_account(users, receiver)
+    
     if token_type.lower() == 'gold tokens':
-      await change_tokens(users, receiver, amount * -1, 'gold tokens')
+      await change_tokens(receiver, amount * -1, 'gold tokens')
       em = discord.Embed(
           title=f'{verifiedEMOJI} Successful Transfer',
           color=discord.Color.green())
@@ -296,7 +331,7 @@ async def _remove(ctx,receiver,amount, token_type, reason):
       )
     
     else:
-      await change_tokens(users, receiver, amount * -1, 'tokens')
+      await change_tokens(receiver, amount * -1, 'tokens')
       em = discord.Embed(
           title=f'{verifiedEMOJI} Successful Transfer',
           color=discord.Color.green())
@@ -313,12 +348,29 @@ async def _remove(ctx,receiver,amount, token_type, reason):
       await tokenlog.send(
           f"**{ctx.author.name}** has removed **{amount} regular tokens** from **{receiver.name}**'s 60hz Competition Balance"
       )
-    with open('tokens.json', 'w') as f:
-      json.dump(users, f)
+ 
   else:
-      #await ctx.respond(eat = True)
       await ctx.send(content = "You do not have permission to use this command.", hidden=True)
+@client.command()
+@commands.is_owner()
+async def insert_token_into_db(ctx):
+	with open('tokens.json', 'r') as f:
+		tokenData = json.load(f)
+	for member in list(tokenData):
+		getDoc = tokens.find_one({"_id" : int(member)})
+		if not getDoc:
+			
+			regTokensData = tokenData[member]['tokens']
+			goldTokensData = tokenData[member]['gold tokens']
+			data = {
+			"RegularTokens" : int(regTokensData),
+			"GoldTokens" : int(goldTokensData)
+			}
+			tokens.insert_one({"_id": int(member), "wealth" : data})
+		
 
+
+	
 @slash.slash(
 	name = "rule",
 	description ="View the rules of the server",
@@ -652,19 +704,20 @@ async def leaderboard(ctx, num=10):
 	print('function loaded')
 	#guild = ctx.guild
 	if num <= 25:
-
-		with open('tokens.json', 'r') as f:
-				users = json.load(f)
+		collections = tokens.find()
+		userlist = []
+		for doc in collections:
+			userlist.append(str(doc['_id']))
 		leaderboard = {}
 		total = []
-		userlist = list(users)
+		
 		addedPoint = cycle([0.1, 0.15, 0.2, 0,25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
 		for mem in userlist:
+				document = tokens.find_one("_id" : int(mem))
 				name = int(mem)  # getting member.id in int form
-				token = users[mem]['tokens']  # number of tokens someone has
+				token = document['wealth']['RegularTokens']  # number of tokens someone has
 				new_token = token + next(addedPoint)
-				leaderboard[
-						new_token] = name  # Allows someone to get name of person with x tokens
+				leaderboard[new_token] = name  # Allows someone to get name of person with x tokens
 				total.append(new_token)  # adding token values of all users
 		total = sorted(total, reverse=True)  # sorting tokens greatest to least
 		em = discord.Embed(title='Tokens Leaderboard',
@@ -673,16 +726,16 @@ async def leaderboard(ctx, num=10):
 		for data in total:
 				if num <= 10:
 
-						id_ = leaderboard[data]
-						
+						id_ = leaderboard[data] 
+						getMemberInfoWithID = tokens.find_one({"_id" : id_})
 						mem = client.get_user(id_)
 						if not mem:
 							mem = await client.fetch_user(id_)
-						LVL = users[str(mem.id)]['gold tokens']
+						goldToken = getMemberInfoWithID['wealth']['GoldTokens']
 						name = mem.name
 						em.add_field(
 								name=f"{idx}. {name}",
-								value=f"`{int(data)} Tokens` | *{LVL}*  Gold Tokens  ",
+								value=f"`{int(data)} Tokens` | *{goldToken}*  Gold Tokens  ",
 								inline=False)
 						if idx == num:
 								break
@@ -690,14 +743,15 @@ async def leaderboard(ctx, num=10):
 								idx += 1
 				else:
 						id_ = leaderboard[data]
+						getMemberInfoWithID = tokens.find_one({"_id" : id_})
 						mem = client.get_user(id_)
 						if not mem:
 							mem = await client.fetch_user(id_)
-						LVL = users[str(mem.id)]['gold tokens']
+						goldToken = getMemberInfoWithID['wealth']['GoldTokens']
 						name = mem.name
 						em.add_field(
 								name=f"{idx}. {name}",
-								value=f"`{int(data)} Tokens` | *{LVL}*  Gold Tokens  ",
+								value=f"`{int(data)} Tokens` | *{goldToken}*  Gold Tokens  ",
 								inline=False)
 						if idx == num:
 								break
@@ -799,17 +853,9 @@ async def links(ctx):
     await ctx.send(embed=em)
 
 
-async def open_account(users, user):
-    if str(user.id) not in users:
-        users[str(user.id)] = {}
-        users[str(user.id)]['tokens'] = 0
-        users[str(user.id)]['gold tokens'] = 0
 
 
-async def change_tokens(users, user, amount, typeToken):
 
-    users[str(user.id)][typeToken] += amount
-    pass
 
 
 @client.command()
@@ -988,58 +1034,62 @@ async def setup_warns(member,json_files):
 @client.command()
 @commands.has_permissions(manage_messages = True)
 async def warn(ctx,member : discord.Member = None, *, reason = None):
-	if not reason:
-		reason = "None"
-	if not member:
-		return await ctx.send("Invalid Command Usage. Remember to do `%warn <member> (optional reason`")
-	
-	em = discord.Embed(title = "Member Warn", color = discord.Color.blue())
-	em.add_field(name = "__Member Warned__", value = f"\n**Name:** {member}\n**ID:** {member.id}", inline = True)
-	em.add_field(name = "__Moderator__", value = f"\n**Name:** {ctx.author}\n**ID:** {ctx.author.id}", inline = True)
-	em.add_field(name = "__Reason__", value = f"{reason}", inline = False)
-	with open('warns.json','r') as f:
-		warns = json.load(f)
-	await setup_warns(member,warns)
-	await add_warns(member,warns,reason)
-	em.timestamp = ctx.message.created_at
-	with open('warns.json','w') as f:
-		json.dump(warns,f,indent=4)
-	await ctx.send(embed = em)
-	await member.send("You were warned for **{}**".format(reason))
+  if not reason:
+    reason = "None"
+  if not member:
+    return await ctx.send("Invalid Command Usage. Remember to do ```%warn <member> (optional reason```")
+  
+  em = discord.Embed(title = "Member Warn", color = discord.Color.blue())
+  em.add_field(name = "__Member Warned__", value = f"\n**Name:** {member}\n**ID:** {member.id}", inline = True)
+  em.add_field(name = "__Moderator__", value = f"\n**Name:** {ctx.author}\n**ID:** {ctx.author.id}", inline = True)
+  em.add_field(name = "__Reason__", value = f"{reason}", inline = False)
+  
+
+  await add_warns(member,reason)
+  em.timestamp = ctx.message.created_at
+  memData = warns.find_one({"_id" : member.id})
+  numWarns = len(memData["warns"])
+  await ctx.send(embed = em)
+  await member.send(f"You were warned in **{ctx.guild.name}**. You now have {numWarns} warns.")
 @client.command()
 @commands.has_permissions(manage_messages = True)
 async def clearwarns(ctx,member : discord.Member = None):
-	if not member:
-		return await ctx.send("Invalid Command Usage. Remember to do `%clear_warns <@member>`")
-	
-	with open('warns.json','r') as f:
-		warns = json.load(f)
-	await setup_warns(member,warns)
-	warns[str(member.guild.id)][str(member.id)]["warns"].clear()
-	with open('warns.json','w') as f:
-		json.dump(warns,f,indent=4)
-	await ctx.send(f"All the warns for **{member}** were cleared! ")
-	await member.send("**All your warns were cleared**")
+  if not member:
+    return await ctx.send("Invalid Command Usage. Remember to do ```%clearwarns <@member>```")
+  
+  memberType = warns.find_one({"_id" : member.id})
+  if not memberType:
+    return await ctx.send("This user doesn't have any warns")
+  warnAmount = memberType["warns"]
+  warnAmount.clear()
+  warns.update_one({"_id" : member.id}, {"$set" : {"warns" : warnAmount}})
+  await ctx.send(f"All the warns for **{member}** were cleared! ")
+  await member.send(f"All of your warns were cleared in **{ctx.guild.name}**")
 
 @client.command()
 @commands.has_permissions(manage_messages = True)
 async def deletewarn(ctx,member : discord.Member = None, warn_number : int = None):
-	if not member or not warn_number:
-		return await ctx.send("Invalid Command Usage. Remember to do `%delete_warn <@member> <number>`")
-	with open('warns.json','r') as f:
-		warns = json.load(f)
-	await setup_warns(member,warns)
-	warns[str(member.guild.id)][str(member.id)]["warns"].pop(warn_number - 1)
-	warnsNumber = len(warns[str(member.guild.id)][str(member.id)]["warns"])
-	with open('warns.json','w') as f:
-		json.dump(warns,f,indent=4)
-	await ctx.send(f"Warn {warn_number} was cleared for **{member}**")
-	await member.send(f"**Warn {warn_number}** was cleared for you. You now have **{warnsNumber} warns**.")
+  if not member or not warn_number:
+    return await ctx.send("Invalid Command Usage. Remember to do ```%delete_warn <@member> <number>```")
+  findData = warns.find_one({"_id" : member.id})
+  if not findData:
+    return await ctx.send("This member doesn't have any warns!")
+  warnAmount = findData["warns"]
+  warnAmount.pop(warn_number - 1)
+  
+  warns.update_one({"_id" : member.id}, {"$set" : {"warns" : warnAmount}})
+  await ctx.send(f"Warn {warn_number} was cleared for **{member}**")
+  memData = warns.find_one({"_id" : member.id})
+  numWarns = len(memData["warns"])
+  await member.send(f"Warn {warn_number} was cleared in **{ctx.guild.name}**. You now have **{numWarns} warns**.")
 
 
-async def get_warn_info(member,json_files):
-  list_of_warns = json_files[str(member.guild.id)][str(member.id)]["warns"]
-  print(json_files[str(member.guild.id)][str(member.id)]["warns"])  
+async def get_warn_info(member):
+  memberData = warns.find_one({"_id" : member.id})
+  if not memberData:
+    return None
+  
+  list_of_warns = memberData["warns"]
   warn_list = ""
   reason_list = ""
   dates = ""
@@ -1060,18 +1110,18 @@ async def get_warn_info(member,json_files):
 async def infractions(ctx, member : discord.Member = None):
   if not member:
     member = ctx.author
-  with open('warns.json','r') as f:
-    warns = json.load(f)
-  await setup_warns(member,warns)
-  info_list = await get_warn_info(member,warns)
-  #warns = info_list[0]
-  reasons = info_list[1]
-  dates = info_list[2]
-  if (dates == "") and (reasons == ""):
-    #warns = "None"
-    reasons = "None"
+  
+  
+  info_list = await get_warn_info(member)
+  if (not info_list) or (info_list[1] == ""):
+    reasons = "No warns!"
     dates = "None"
-  em = discord.Embed(title = f"Infractions for {member.name}", color = discord.Color.green())
+  else:
+    reasons = info_list[1]
+    dates = info_list[2]
+
+    
+  em = discord.Embed(title = f"Infractions for {member.name}", color = discord.Color.blue())
   #em.add_field(name ="Warns",value=f"{warns}",inline =True)
   em.add_field(name = "Reasons", value = reasons, inline = True)
   em.add_field(name = "Time", value = dates, inline = True)
@@ -1079,6 +1129,7 @@ async def infractions(ctx, member : discord.Member = None):
   em.timestamp = ctx.message.created_at
   em.set_footer(text = f"Requested by {ctx.author}", icon_url = ctx.author.avatar_url)
   await ctx.send(embed = em)
+
 
 @client.command(aliases = ['rule'])
 async def rules(ctx, *, page: int = None):

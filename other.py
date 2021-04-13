@@ -4,7 +4,7 @@ import os
 import json
 import datetime
 import asyncio
-from replit import db
+
 
 from mooncanedit import gdshopToken, gdshopGoldToken, list_desc, competition_info
 from roleStuff import demonsROLE, gdrolesROLE, pointercrateROLE, competitionROLE, collabROLE, moderationsROLE, perksROLE, miscROLE, memberRolesROLE, leaderboardToppers, pingsROLE
@@ -30,7 +30,7 @@ guild_ids = [782651282128896020,757383943116030074] # Put your server ID in this
 
 @slash.slash(name="ping", description="Returns the latency of the bot", guild_ids=guild_ids)
 async def _ping(ctx): # Defines a new "context" (ctx) command called "ping."
-    await ctx.respond()
+    #await ctx.respond()
     await ctx.send(f"Pong! ({int(client.latency*1000)}ms)")
 @slash.slash(name="wealth", 
             description="Displays your current wealth balance in tokens.",
@@ -43,7 +43,7 @@ async def _ping(ctx): # Defines a new "context" (ctx) command called "ping."
             guild_ids=guild_ids)
 async def _wealth(ctx, member = None): # Defines a new "context" (ctx) command called "ping."
     
-    await ctx.respond()
+    #await ctx.respond()
     if not member:
       member = ctx.author
     with open('tokens.json', 'r') as f:
@@ -65,7 +65,7 @@ async def _wealth(ctx, member = None): # Defines a new "context" (ctx) command c
             guild_ids=guild_ids)
 async def _gdshop(ctx): # Defines a new "context" (ctx) command called "ping."
     
-    await ctx.respond()
+    #await ctx.respond()
     embed = discord.Embed(title='60hz Gang Shop', color=discord.Color.purple())
     embed.add_field(name='Normal Shop', value=gdshopToken)
     embed.add_field(name='Special Shop (1 Gold Token Each)',
@@ -172,7 +172,7 @@ getHelpMenudesc = """
 async def _give(ctx,receiver,amount,token_type, reason):
   if ctx.author.guild_permissions.administrator:
 
-    await ctx.respond()
+    #await ctx.respond()
     tokenlog = client.get_channel(805951549653778473)
     with open('tokens.json', 'r') as f:
         users = json.load(f)
@@ -215,7 +215,7 @@ async def _give(ctx,receiver,amount,token_type, reason):
     with open('tokens.json', 'w') as f:
       json.dump(users, f)
   else:
-      await ctx.respond(eat = True)
+      #await ctx.respond(eat = True)
       await ctx.send(content = "You do not have permission to use this command.", hidden=True)
 
 @slash.slash(name = "whisper",
@@ -229,7 +229,7 @@ async def _give(ctx,receiver,amount,token_type, reason):
   )
  ])
 async def _secret(ctx, message):
-  await ctx.respond(eat=True)  # Again, this is optional, but still recommended to.
+  #await ctx.respond(eat=True)  # Again, this is optional, but still recommended to.
   await ctx.send(content = f"{message}", hidden=True)
 
 @slash.slash(
@@ -270,7 +270,7 @@ async def _secret(ctx, message):
 async def _remove(ctx,receiver,amount, token_type, reason):
   if ctx.author.guild_permissions.administrator:
 
-    await ctx.respond()
+    #await ctx.respond()
     tokenlog = client.get_channel(805951549653778473)
     with open('tokens.json', 'r') as f:
         users = json.load(f)
@@ -316,7 +316,7 @@ async def _remove(ctx,receiver,amount, token_type, reason):
     with open('tokens.json', 'w') as f:
       json.dump(users, f)
   else:
-      await ctx.respond(eat = True)
+      #await ctx.respond(eat = True)
       await ctx.send(content = "You do not have permission to use this command.", hidden=True)
 
 @slash.slash(
@@ -387,7 +387,7 @@ async def _rules(ctx, rule):
 				title=f'Rule {rule} | {ruledesc}',
 				description=f'\n\n__**Why is this a rule?**__\n\n{rulereason}',
 				color=discord.Color.green())
-		await ctx.respond()
+		#await ctx.respond()
 		await ctx.send(embed=em)
 
 @slash.slash(
@@ -420,61 +420,61 @@ async def _role(ctx, role):
 				em = discord.Embed(title='Demon Roles',
 														description=f'{demonsROLE}',
 														color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "2":
 				em = discord.Embed(title='GD/Self Roles',
 													description=f'Get these roles in <#797897371866234910> by reacting!\n{gdrolesROLE}',
 													color=discord.Color.red())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "3":
 				em = discord.Embed(title='Competition Roles',
 													description=f'{competitionROLE}',
 													color=discord.Color.green())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "4":
 				em = discord.Embed(title='Collaboration Roles',
 													description=f'{collabROLE}',
 													color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "5":
 				em = discord.Embed(title='Staff Roles',
 													description=f'{moderationsROLE}',
 													color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "6":
 				em = discord.Embed(title='Perk Roles :smirk: ',
 													description=f'{perksROLE}',
 													color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "7":
 				em = discord.Embed(title='Misc Roles',
 													description=f'{miscROLE}',
 													color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "8":
 				em = discord.Embed(title='Leaderboard Topper Roles',
 													description=f'{leaderboardToppers}',
 													color=discord.Color.red())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "9":
 				em = discord.Embed(title='Member Roles',
 													description=f'{memberRolesROLE}',
 													color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 		elif page == "10":
 				em = discord.Embed(title='Ping Roles',
 													description=f'{pingsROLE}',
 													color=discord.Color.blue())
-				await ctx.respond()
+				#await ctx.respond()
 				await ctx.send(embed=em)
 
 
@@ -649,58 +649,63 @@ async def role_info_error(ctx, error):
 
 @client.command(aliases=['lb'])
 async def leaderboard(ctx, num=10):
-    print('function loaded')
-    #guild = ctx.guild
-    if num <= 25:
+	print('function loaded')
+	#guild = ctx.guild
+	if num <= 25:
 
-        with open('tokens.json', 'r') as f:
-            users = json.load(f)
-        leaderboard = {}
-        total = []
-        userlist = list(users)
-        addedPoint = cycle([0.1, 0.15, 0.2, 0,25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
-        for mem in userlist:
-            name = int(mem)  # getting member.id in int form
-            token = users[mem]['tokens']  # number of tokens someone has
-            new_token = token + next(addedPoint)
-            leaderboard[
-                new_token] = name  # Allows someone to get name of person with x tokens
-            total.append(new_token)  # adding token values of all users
-        total = sorted(total, reverse=True)  # sorting tokens greatest to least
-        em = discord.Embed(title='Tokens Leaderboard',
-                           color=discord.Color.blue())
-        idx = 1
-        for data in total:
-            if num <= 10:
+		with open('tokens.json', 'r') as f:
+				users = json.load(f)
+		leaderboard = {}
+		total = []
+		userlist = list(users)
+		addedPoint = cycle([0.1, 0.15, 0.2, 0,25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+		for mem in userlist:
+				name = int(mem)  # getting member.id in int form
+				token = users[mem]['tokens']  # number of tokens someone has
+				new_token = token + next(addedPoint)
+				leaderboard[
+						new_token] = name  # Allows someone to get name of person with x tokens
+				total.append(new_token)  # adding token values of all users
+		total = sorted(total, reverse=True)  # sorting tokens greatest to least
+		em = discord.Embed(title='Tokens Leaderboard',
+												color=discord.Color.blue())
+		idx = 1
+		for data in total:
+				if num <= 10:
 
-                id_ = leaderboard[data]
-                mem = client.get_user(id_)
-                LVL = users[str(mem.id)]['gold tokens']
-                name = mem.name
-                em.add_field(
-                    name=f"{idx}. {name}",
-                    value=f"`{int(data)} Tokens` | *{LVL}*  Gold Tokens  ",
-                    inline=False)
-                if idx == num:
-                    break
-                else:
-                    idx += 1
-            else:
-                id_ = leaderboard[data]
-                mem = client.get_user(id_)
-                LVL = users[str(mem.id)]['gold tokens']
-                name = mem.name
-                em.add_field(
-                    name=f"{idx}. {name}",
-                    value=f"`{int(data)} Tokens` | *{LVL}*  Gold Tokens  ",
-                    inline=False)
-                if idx == num:
-                    break
-                else:
-                    idx += 1
-        await ctx.send(embed=em)
-    else:
-        await ctx.send("That's too many people to display at once!")
+						id_ = leaderboard[data]
+						
+						mem = client.get_user(id_)
+						if not mem:
+							mem = await client.fetch_user(id_)
+						LVL = users[str(mem.id)]['gold tokens']
+						name = mem.name
+						em.add_field(
+								name=f"{idx}. {name}",
+								value=f"`{int(data)} Tokens` | *{LVL}*  Gold Tokens  ",
+								inline=False)
+						if idx == num:
+								break
+						else:
+								idx += 1
+				else:
+						id_ = leaderboard[data]
+						mem = client.get_user(id_)
+						if not mem:
+							mem = await client.fetch_user(id_)
+						LVL = users[str(mem.id)]['gold tokens']
+						name = mem.name
+						em.add_field(
+								name=f"{idx}. {name}",
+								value=f"`{int(data)} Tokens` | *{LVL}*  Gold Tokens  ",
+								inline=False)
+						if idx == num:
+								break
+						else:
+								idx += 1
+		await ctx.send(embed=em)
+	else:
+		await ctx.send("That's too many people to display at once!")
 
 
 @client.command()
@@ -1120,7 +1125,10 @@ async def rules(ctx, *, page: int = None):
 				elif page == 11:
 						ruledesc = 'If you have completed an Extreme Demon or a List Demon, it will not officially be believed unless there is video proof (and list points if it\'s a list demon)'
 						rulereason = 'Extreme Demons and Lists Demons are quite hard to complete which is why they will need some proof that you actually did it. Remember to never cheat!'
-				elif page >= 11:
+				elif page == 12:
+						ruledesc = 'No DM advertising'
+						rulereason = 'DM Advertising is annoying. If you want to advertise, there\'s an advertising channel where you can post your content if you are above level 5.'
+				elif page >= 13:
 					return await ctx.send("There are only 11 rules!")
 				
 				em = discord.Embed(
@@ -1129,6 +1137,27 @@ async def rules(ctx, *, page: int = None):
 						color=discord.Color.green())
 				await ctx.send(embed=em)
 
+@client.command()
+async def meetstaff(ctx, *, page: int = None):
+		staffname = ''
+		staffintro = ''
+		not_desc = 'Page **1**: QuackerDeezlesYT'
+		if not page:
+				em = discord.Embed(title='60hz Gang Staff Introductions',
+													description=not_desc,
+													color=discord.Color.green())
+				await ctx.send(embed=em)
+		else:
+
+				if page == 1:
+						staffname = 'QuackerDeezlesYT'
+						staffintro = 'Heyy! I’m QuackerDeezles, a 13 year old asshole from the US, born on December 15. I love math, music (playing piano and percussion, listening to dubstep, and sometimes composing when I feel like it), puzzles, ducks :duck: , and of course, Geometry Dash! Many people don’t believe this but I have gotten my name a couple years ago while going to the city library. I started playing Geometry Dash around May 2015, and since then it’s my favorite video game. Other than that, I play skribbl.io and Fall Guys when I just want to take a break from GD.\n\nThe times I get on Discord are on and off, sometimes I have a shit-ton of homework and some days I barely have anything to do. My DM’s are open so feel free if you want to chat!\n\nOther than that, I don’t really have much else. Hope you have a great rest of your day!'
+				
+				em = discord.Embed(
+						title=f'{staffname}\'s Introducion',
+						description=f'{staffintro}',
+						color=discord.Color.green())
+				await ctx.send(embed=em)
 
 @client.command()
 async def server(ctx):
