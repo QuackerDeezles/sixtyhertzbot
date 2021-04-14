@@ -145,6 +145,32 @@ getHelpMenudesc = """
 # @slash.slash(name = "give", description = "Gives tokens to a member", guild_ids = [757383943116030074], options = options)
 # async def give(ctx : SlashContext, amount):
 #   await ctx.send("I didn't give anything to anyone.")
+
+
+
+async def change_tokens(receiver, amount, tokenType):
+	getDoc = tokens.find_one({"_id" : receiver.id})
+	typeToken = ""
+	if tokenType == 'gold tokens':
+		typeToken = "GoldTokens"
+	elif tokenType == 'tokens':
+		typeToken = "RegularTokens"
+	else:
+		return None
+	if not getDoc:
+		data = {
+			"RegularTokens" : 0,
+			"GoldTokens" : 0
+		}
+		tokens.insert_one({"_id" : receiver.id, "wealth" : data}) # insert original data (unnesccary technically, but it's ok)
+		
+		
+		data[typeToken] += amount # Update number based on datatype
+		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}}) # db update
+	else:
+		data = getDoc['wealth']
+		data[tokenType] += amount
+		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}})
 @slash.slash(
   name="give",
   description="Allows you to give tokens to members. (Only Server Admins can use.)",
@@ -183,32 +209,6 @@ getHelpMenudesc = """
   guild_ids=guild_ids
   #channel_ids = [805878707012108288,759974319799140412]
   )
-
-
-async def change_tokens(receiver, amount, tokenType):
-	getDoc = tokens.find_one({"_id" : receiver.id})
-	typeToken = ""
-	if tokenType == 'gold tokens':
-		typeToken = "GoldTokens"
-	elif tokenType == 'tokens':
-		typeToken = "RegularTokens"
-	else:
-		return None
-	if not getDoc:
-		data = {
-			"RegularTokens" : 0,
-			"GoldTokens" : 0
-		}
-		tokens.insert_one({"_id" : receiver.id, "wealth" : data}) # insert original data (unnesccary technically, but it's ok)
-		
-		
-		data[typeToken] += amount # Update number based on datatype
-		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}}) # db update
-	else:
-		data = getDoc['wealth']
-		data[tokenType] += amount
-		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}})
-
 async def _give(ctx,receiver,amount,token_type, reason):
 	try:
 
@@ -545,9 +545,7 @@ async def giveTokens(ctx, receiver: discord.Member, *, grant: int):
         #await ctx.send("You can't give that many tokens at once!")
         #else:
         tokenlog = client.get_channel(805951549653778473)
-        with open('tokens.json', 'r') as f:
-            users = json.load(f)
-        await open_account(users, receiver)
+        
 
         def check(m):
             return m.channel.id == ctx.channel.id and m.author.id == ctx.author.id
@@ -557,51 +555,51 @@ async def giveTokens(ctx, receiver: discord.Member, *, grant: int):
         )
         try:
 
-            tokenType = await client.wait_for("message",
-                                              check=check,
-                                              timeout=20)
-            if tokenType.content.lower() == 'gold token':
-                await change_tokens(users, receiver, grant, 'gold tokens')
-                em = discord.Embed(
-                    title=f'{verifiedEMOJI} Successful Transfer',
-                    color=discord.Color.green())
-                em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
-                em.add_field(name='Receiver', value=receiver, inline=False)
-                em.add_field(name='Amount Given',
-                             value=f'{grant} gold token(s)',
-                             inline=False)
-                await ctx.send(embed=em)
-                await receiver.send(
-                    f"**{ctx.author.name}** has added **{grant} gold tokens** to your 60hz Competition Balance"
-                )
-                await tokenlog.send(
-                    f"**{ctx.author.name}** has added **{grant} gold tokens** to **{receiver.name}**'s 60hz Competition Balance"
-                )
-            elif (tokenType.content.lower()
-                  == 'token') or (tokenType.content.lower()
-                                  == 'regular token'):
-                await change_tokens(users, receiver, grant, 'tokens')
-                em = discord.Embed(
-                    title=f'{verifiedEMOJI} Successful Transfer',
-                    color=discord.Color.green())
-                em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
-                em.add_field(name='Receiver', value=receiver, inline=False)
-                em.add_field(name='Amount Given',
-                             value=f'{grant} token(s)',
-                             inline=False)
-                await ctx.send(embed=em)
-                await receiver.send(
-                    f"**{ctx.author.name}** has added **{grant} tokens** to your 60hz Competition Balance"
-                )
-                await tokenlog.send(
-                    f"**{ctx.author.name}** has added **{grant} regular tokens** to **{receiver.name}**'s 60hz Competition Balance"
-                )
-            else:
-                await ctx.send(
-                    "That isn't a valid option. Try again and say either `gold token` or `token`"
-                )
-            with open('tokens.json', 'w') as f:
-                json.dump(users, f)
+						tokenType = await client.wait_for("message",
+																							check=check,
+																							timeout=20)
+						token_type = tokenType
+
+						if token_type.lower() == 'gold tokens':
+							await change_tokens(receiver, amount, 'gold tokens')
+							em = discord.Embed(
+									title=f'{verifiedEMOJI} Successful Transfer',
+									color=discord.Color.green())
+							em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
+							em.add_field(name='Receiver', value=receiver, inline=False)
+							em.add_field(name='Amount Given',
+														value=f'{amount} gold token(s)',
+														inline=False)
+							em.add_field(name = 'Reason', value = f'{reason}',inline = False)
+							await ctx.send(embed=em)
+							await receiver.send(
+									f"**{ctx.author.name}** has added **{amount} gold tokens** to your 60hz Competition Balance for {reason}"
+							)
+							await tokenlog.send(
+									f"**{ctx.author.name}** has added **{amount} gold tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
+							)
+						else:
+							await change_tokens(receiver, amount, 'tokens')
+							em = discord.Embed(
+									title=f'{verifiedEMOJI} Successful Transfer',
+									color=discord.Color.green())
+							em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
+							em.add_field(name='Receiver', value=receiver, inline=False)
+							em.add_field(name='Amount Given',
+														value=f'{amount} token(s)',
+														inline=False)
+							await ctx.send(embed=em)
+							await receiver.send(
+									f"**{ctx.author.name}** has added **{amount} tokens** to your 60hz Competition Balance for {reason}"
+							)
+							await tokenlog.send(
+									f"**{ctx.author.name}** has added **{amount} regular tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
+							)
+						else:
+								await ctx.send(
+										"That isn't a valid option. Try again and say either `gold token` or `token`"
+								)
+            
         except asyncio.TimeoutError:
             await ctx.send("You took too much time. Try again.")
     else:
