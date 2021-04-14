@@ -261,15 +261,15 @@ async def _give(ctx,receiver,amount,token_type, reason):
 		await ctx.send(e)
 
 @slash.slash(name = "whisper",
- description ="Test Command",
- options = [
-   manage_commands.create_option(
-    name = "message",
-    description = "The message you want the bot to whisper",
-    option_type = 3,
-    required = True,
-  )
- ])
+	description ="Test Command",
+	options = [
+		manage_commands.create_option(
+			name = "message",
+			description = "The message you want the bot to whisper",
+			option_type = 3,
+			required = True,
+		)
+	])
 async def _secret(ctx, message):
   await ctx.respond(eat=True)  # Again, this is optional, but still recommended to.
   await ctx.send(content = f"{message}", hidden=True)
@@ -539,71 +539,71 @@ async def _role(ctx, role):
 
 @client.command(aliases=['donate', 'transfer', 'give'])
 @commands.has_permissions(administrator=True)
-async def giveTokens(ctx, receiver: discord.Member, *, grant: int):
-    if str(ctx.guild.id) == '757383943116030074':
-        #if grant > 200:
-        #await ctx.send("You can't give that many tokens at once!")
-        #else:
-        tokenlog = client.get_channel(805951549653778473)
-        
+async def giveTokens(ctx, receiver: discord.Member, grant: int, reason=None):
+		if str(ctx.guild.id) == '757383943116030074':
+				#if grant > 200:
+				#await ctx.send("You can't give that many tokens at once!")
+				#else:
+				tokenlog = client.get_channel(805951549653778473)
+				
 
-        def check(m):
-            return m.channel.id == ctx.channel.id and m.author.id == ctx.author.id
+				def check(m):
+						return m.channel.id == ctx.channel.id and m.author.id == ctx.author.id
 
-        await ctx.send(
-            "Which token type do you want to give? (The receiver needs to have Dm's on to get the transaction receipt from the bot)"
-        )
-        try:
+				await ctx.send(
+						"Which token type do you want to give? (The receiver needs to have Dm's on to get the transaction receipt from the bot)"
+				)
+				try:
 
 						tokenType = await client.wait_for("message",
 																							check=check,
 																							timeout=20)
 						token_type = tokenType
+						if token_type.lower() in ['gold tokens','tokens']:
 
-						if token_type.lower() == 'gold tokens':
-							await change_tokens(receiver, amount, 'gold tokens')
-							em = discord.Embed(
-									title=f'{verifiedEMOJI} Successful Transfer',
-									color=discord.Color.green())
-							em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
-							em.add_field(name='Receiver', value=receiver, inline=False)
-							em.add_field(name='Amount Given',
-														value=f'{amount} gold token(s)',
-														inline=False)
-							em.add_field(name = 'Reason', value = f'{reason}',inline = False)
-							await ctx.send(embed=em)
-							await receiver.send(
-									f"**{ctx.author.name}** has added **{amount} gold tokens** to your 60hz Competition Balance for {reason}"
-							)
-							await tokenlog.send(
-									f"**{ctx.author.name}** has added **{amount} gold tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
-							)
-						else:
-							await change_tokens(receiver, amount, 'tokens')
-							em = discord.Embed(
-									title=f'{verifiedEMOJI} Successful Transfer',
-									color=discord.Color.green())
-							em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
-							em.add_field(name='Receiver', value=receiver, inline=False)
-							em.add_field(name='Amount Given',
-														value=f'{amount} token(s)',
-														inline=False)
-							await ctx.send(embed=em)
-							await receiver.send(
-									f"**{ctx.author.name}** has added **{amount} tokens** to your 60hz Competition Balance for {reason}"
-							)
-							await tokenlog.send(
-									f"**{ctx.author.name}** has added **{amount} regular tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
-							)
+							if token_type.lower() == 'gold tokens':
+								await change_tokens(receiver, grant, 'gold tokens')
+								em = discord.Embed(
+										title=f'{verifiedEMOJI} Successful Transfer',
+										color=discord.Color.green())
+								em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
+								em.add_field(name='Receiver', value=receiver, inline=False)
+								em.add_field(name='Amount Given',
+															value=f'{grant} gold token(s)',
+															inline=False)
+								em.add_field(name = 'Reason', value = f'{reason}',inline = False)
+								await ctx.send(embed=em)
+								await receiver.send(
+										f"**{ctx.author.name}** has added **{grant} gold tokens** to your 60hz Competition Balance for {grant}"
+								)
+								await tokenlog.send(
+										f"**{ctx.author.name}** has added **{grant} gold tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
+								)
+							else:
+								await change_tokens(receiver, grant, 'tokens')
+								em = discord.Embed(
+										title=f'{verifiedEMOJI} Successful Transfer',
+										color=discord.Color.green())
+								em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
+								em.add_field(name='Receiver', value=receiver, inline=False)
+								em.add_field(name='Amount Given',
+															value=f'{grant} token(s)',
+															inline=False)
+								await ctx.send(embed=em)
+								await receiver.send(
+										f"**{ctx.author.name}** has added **{grant} tokens** to your 60hz Competition Balance for {reason}"
+								)
+								await tokenlog.send(
+										f"**{ctx.author.name}** has added **{grant} regular tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
+								)
 						else:
 								await ctx.send(
 										"That isn't a valid option. Try again and say either `gold token` or `token`"
 								)
-            
-        except asyncio.TimeoutError:
-            await ctx.send("You took too much time. Try again.")
-    else:
-        pass
+						
+				except asyncio.TimeoutError:
+						await ctx.send("You took too much time. Try again.")
+
 
 
 @giveTokens.error
