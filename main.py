@@ -28,8 +28,8 @@ redloading = '<a:red_loading:805930785919467521>'
 guild_ids = [782651282128896020,757383943116030074] # Put your server ID in this array.
 
 url = os.getenv("MONGO")
-url2 = "mongodb+srv://quackerandmega:sixtyhertz@cluster.ir0xe.mongodb.net/discord?retryWrites=true&w=majority"
-cluster = MongoClient(url2)
+url2 = ""
+cluster = MongoClient(url)
 db = cluster['discord']
 tokens = db['tokens']
 warns = db['warns']
