@@ -1027,8 +1027,20 @@ async def remove_suggestion_error(ctx, error):
             "You do not have the required permissions to use this command.")
     else:
         raise error
-async def add_warns(member,json_files,reason):
-  json_files[str(member.guild.id)][str(member.id)]["warns"].append({"reason" : reason, "time" : datetime.datetime.now().strftime("%B %d, %Y  %I: %M %p UTC")})
+async def add_warns(member,reason):
+  data = warns.find_one({"_id" : member.id})
+  if not data:
+    warnData = [
+      {"reason" : reason,
+      "time" : datetime.datetime.now().strftime("%B %d, %Y  %I: %M %p UTC") }
+    ]
+    warns.insert_one({"_id" : member.id, "warns" : warnData})
+  else:
+    warnDataList = data["warns"]
+    warnDataList.append({"reason" : reason, "time" : datetime.datetime.now().strftime("%B %d, %Y  %I: %M %p UTC")})
+    warns.update_one({"_id" : member.id}, {"$set" : {"warns": warnDataList}})
+  # json_files[str(member.guild.id)][str(member.id)]["warns"].append({"reason" : reason, "time" : datetime.datetime.now().strftime("%B %d, %Y  %I: %M %p UTC")})
+
 
 async def setup_warns(member,json_files):
   if not str(member.guild.id) in json_files:
