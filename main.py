@@ -169,7 +169,7 @@ async def change_tokens(receiver, amount, tokenType):
 		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}}) # db update
 	else:
 		data = getDoc['wealth']
-		data[tokenType] += amount
+		data[typeToken] += amount
 		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}})
 @slash.slash(
   name="give",
