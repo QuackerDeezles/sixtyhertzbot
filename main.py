@@ -210,51 +210,55 @@ async def change_tokens(receiver, amount, tokenType):
 		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}})
 
 async def _give(ctx,receiver,amount,token_type, reason):
-  if ctx.author.guild_permissions.administrator:
+	try:
 
-    
-    tokenlog = client.get_channel(805951549653778473)
-    
-    #await open_account(users, receiver)
-    if token_type.lower() == 'gold tokens':
-      await change_tokens(receiver, amount, 'gold tokens')
-      em = discord.Embed(
-          title=f'{verifiedEMOJI} Successful Transfer',
-          color=discord.Color.green())
-      em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
-      em.add_field(name='Receiver', value=receiver, inline=False)
-      em.add_field(name='Amount Given',
-                    value=f'{amount} gold token(s)',
-                    inline=False)
-      em.add_field(name = 'Reason', value = f'{reason}',inline = False)
-      await ctx.send(embed=em)
-      await receiver.send(
-          f"**{ctx.author.name}** has added **{amount} gold tokens** to your 60hz Competition Balance for {reason}"
-      )
-      await tokenlog.send(
-          f"**{ctx.author.name}** has added **{amount} gold tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
-    )
-    else:
-      await change_tokens(receiver, amount, 'tokens')
-      em = discord.Embed(
-          title=f'{verifiedEMOJI} Successful Transfer',
-          color=discord.Color.green())
-      em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
-      em.add_field(name='Receiver', value=receiver, inline=False)
-      em.add_field(name='Amount Given',
-                    value=f'{amount} token(s)',
-                    inline=False)
-      await ctx.send(embed=em)
-      await receiver.send(
-          f"**{ctx.author.name}** has added **{amount} tokens** to your 60hz Competition Balance for {reason}"
-      )
-      await tokenlog.send(
-          f"**{ctx.author.name}** has added **{amount} regular tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
-      )
-    
-  else:
-      
-      await ctx.send(content = "You do not have permission to use this command.", hidden=True)
+		if ctx.author.guild_permissions.administrator:
+
+			
+			tokenlog = client.get_channel(805951549653778473)
+			
+			#await open_account(users, receiver)
+			if token_type.lower() == 'gold tokens':
+				await change_tokens(receiver, amount, 'gold tokens')
+				em = discord.Embed(
+						title=f'{verifiedEMOJI} Successful Transfer',
+						color=discord.Color.green())
+				em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
+				em.add_field(name='Receiver', value=receiver, inline=False)
+				em.add_field(name='Amount Given',
+											value=f'{amount} gold token(s)',
+											inline=False)
+				em.add_field(name = 'Reason', value = f'{reason}',inline = False)
+				await ctx.send(embed=em)
+				await receiver.send(
+						f"**{ctx.author.name}** has added **{amount} gold tokens** to your 60hz Competition Balance for {reason}"
+				)
+				await tokenlog.send(
+						f"**{ctx.author.name}** has added **{amount} gold tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
+			)
+			else:
+				await change_tokens(receiver, amount, 'tokens')
+				em = discord.Embed(
+						title=f'{verifiedEMOJI} Successful Transfer',
+						color=discord.Color.green())
+				em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
+				em.add_field(name='Receiver', value=receiver, inline=False)
+				em.add_field(name='Amount Given',
+											value=f'{amount} token(s)',
+											inline=False)
+				await ctx.send(embed=em)
+				await receiver.send(
+						f"**{ctx.author.name}** has added **{amount} tokens** to your 60hz Competition Balance for {reason}"
+				)
+				await tokenlog.send(
+						f"**{ctx.author.name}** has added **{amount} regular tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
+				)
+			
+		else:
+				
+				await ctx.send(content = "You do not have permission to use this command.", hidden=True)
+	except Exception as e:
+		await ctx.send(e)
 
 @slash.slash(name = "whisper",
  description ="Test Command",
