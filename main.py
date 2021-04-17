@@ -767,7 +767,37 @@ async def leaderboard(ctx, num=10):
 		await ctx.send(embed=em)
 	else:
 		await ctx.send("That's too many people to display at once!")
+@client.command(aliases=['lb'])
+async def newleaderboard(ctx, num=10):
+	print('function loaded')
+	#guild = ctx.guild
+	if num <= 25:
+		async with ctx.typing():
 
+			sortedRanks = tokens.find().sort("wealth.RegularTokens", -1)
+			em = discord.Embed(title='Tokens Leaderboard', color=discord.Color.blue())
+			idx = 1
+			for doc in sortedRanks:
+				try:
+
+					person = client.get_user(doc["_id"])
+					regToken = doc['wealth']['RegularTokens']
+					goldToken = doc['wealth']['GoldTokens']
+					em.add_field(
+									name=f"{idx}. {person.name}",
+									value=f"`{regToken} Tokens` | *{goldToken}*  Gold Tokens  ",
+									inline=False)
+				except:
+					break
+				finally:
+
+					idx += 1
+			await ctx.send(embed = em)
+
+		
+	
+	else:
+		await ctx.send("That's too many people to display at once!")
 @leaderboard.error
 async def leaderboard_error(ctx,error):
 	await ctx.send(error)
