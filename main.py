@@ -464,9 +464,8 @@ async def _rules(ctx, rule):
 				manage_commands.create_choice("5","Staff Roles"),
 				manage_commands.create_choice("6","Perk Roles"),
 				manage_commands.create_choice("7","Misc Roles"),
-				manage_commands.create_choice("8","Leaderboard Topper Roles"),
-				manage_commands.create_choice("9","Member Roles"),
-				manage_commands.create_choice("10","Ping Roles")
+				manage_commands.create_choice("8","Ping Roles")
+				
 			]
   )
  	],
@@ -663,7 +662,7 @@ async def roleinfo(ctx, page=1):
 				await ctx.send(embed = em)
 		else:
 				await ctx.send(
-						"**Invalid Number/ Command Usage.** \nRemember to do `!roleinfo <page_number>`. You can only go up to 10 pages."
+						"**Invalid Number/ Command Usage.** \nRemember to do `!roleinfo <page_number>`. You can only go up to 8 pages."
 				)
 
 
