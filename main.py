@@ -769,7 +769,7 @@ async def leaderboard(ctx, num=10):
 		await ctx.send("That's too many people to display at once!")
 @client.command(aliases=['lb'])
 async def newleaderboard(ctx, num=10):
-	print('function loaded')
+	print('function loadede')
 	#guild = ctx.guild
 	if num <= 25:
 		async with ctx.typing():
