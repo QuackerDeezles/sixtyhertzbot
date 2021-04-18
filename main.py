@@ -679,7 +679,7 @@ async def roleinfo(ctx, page=1):
 		elif page == 9:
 				em = discord.Embed(title = "Ping Roles",
 													description = f"{pingsROLE}",
-													color = discord.Color.light_gray())
+													color = discord.Color.blue())
 		else:
 				await ctx.send(
 						"**Invalid Number/ Command Usage.** \nRemember to do `!roleinfo <page_number>`. You can only go up to 10 pages."

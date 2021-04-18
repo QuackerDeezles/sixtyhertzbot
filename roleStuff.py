@@ -90,7 +90,7 @@ collabROLE = """
 moderationsROLE = """
 <@&757385793613332600> Administrators of this server
 <@&760317079466409994> Moderators of this server
-<@&779053250069397524> Those training to become an admin
+<@&827221507910270976> Those training to become an admin
 <@&779053192184987689> Those training to become a mod
 <@&758790944521715804> Developers of 60hz Gang Bot
 <@&811406896120201226> Those that will help add and place levels to the server 60hz and non-60hz lists
@@ -106,8 +106,6 @@ perksROLE = """
 """
 
 miscROLE = """
-<@&799680362271866940> Someone who has won a giveaway
-<@&770713196934987776> A content creator with 100+ Subscribers/Followers (Proof req.)
 <@&768909786192150619> Someone who has creator points in Geometry Dash (Proof req.)
 """
 
