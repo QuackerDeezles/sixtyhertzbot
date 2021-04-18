@@ -767,7 +767,7 @@ async def leaderboard(ctx, num=10):
 		await ctx.send(embed=em)
 	else:
 		await ctx.send("That's too many people to display at once!")
-@client.command(aliases=['lb'])
+@client.command(aliases=['difflb'])
 async def newleaderboard(ctx, num=10):
 	print('function loadede')
 	#guild = ctx.guild
