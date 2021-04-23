@@ -899,7 +899,7 @@ async def staff(ctx):
     trialmod = f"**Trial Mod ({len(listofTM)})**\n"
     devs = f"**Developers ({len(listofDevs)})**\n"
     listMods = f"**List Managers ({len(listofLM)})**\n"
-    serverowner = f"[**Server Owner**](https://www.youtube.com/channel/UCxW9ilAhTGuhLvzIhgmSvyw)"
+    serverowner = f"[**Server Owner**](https://www.youtube.com/channel/UC6PKOburRMFSjwTCQcL4wbQ)"
     a, b, c, d, e,f,= 1, 1, 1, 1, 1,1
     for name in listofmods:
         mod += str(a) + ". " + name + '\n'
@@ -922,7 +922,7 @@ async def staff(ctx):
         listMods += str(f) + ". " + name + '\n'
         f += 1
 
-    staffdesc = (serverowner + "\n[MoonFrost]((https://www.youtube.com/channel/UCxW9ilAhTGuhLvzIhgmSvyw))") + '\n\n' "**Server Co-Owner (1)** \nQuackerDeezlesYT\n\n" + admin + '\n' + trialadmin + '\n' + listMods+ '\n' + mod + '\n' + trialmod + '\n' + devs
+    staffdesc = (serverowner + "\n[QuackerDeezlesYT]((https://www.youtube.com/channel/UC6PKOburRMFSjwTCQcL4wbQ))") + '\n\n' + admin + '\n' + trialadmin + '\n' + listMods+ '\n' + mod + '\n' + trialmod + '\n' + devs
     em = discord.Embed(title='Current Staff',
                        description=staffdesc,
                        color=discord.Color.purple())
