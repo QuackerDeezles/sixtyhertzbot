@@ -5,7 +5,6 @@ roleParagraphs = """
 @Trial Admin Those training to become an admin
 @Trial Mod Those training to become a mod
 @Developer Creators of Discord bots or other coding things
-@List Editor Those that will help add and place levels to the server 60hz and non-60hz lists
 
 @Destroying the Competition!! Anyone with 5+ competition wins
 @Competition Winner! Anyone with one more competition wins
@@ -35,7 +34,7 @@ roleParagraphs = """
 @Partner Someone who's server has partnered with this server
 @GD Creator Someone who has creator points in Geometry Dash (Proof req.)
 @Content Creator A content creator with 100+ Subscribers/Followers (Proof req.)
-@💎Server Booster Someone who has boosted the server pog. They also get 20 monthly tokens.
+@💎Server Booster Someone who has boosted the server pog. 
 @Donator :O Someone who has donated to the server in some way
 @Giveaway Winner Someone who has won a giveaway
 
@@ -44,9 +43,6 @@ roleParagraphs = """
 @Collab Current Layout Builder A current layout creator for a collab in this sever
 @Collab Current Playtester A current playtester for a collab in this sever
 @Current Collaborator Anyone participating in one of this servers' GD collabs
-
-@VIP A role given to a special few that get the following perks: 5 monthly tokens, #advertising at any level, giveaway priority, VIP on my Twitch streams, access to VIP and VIP+ only giveaways, and access to future plans for this server.
-@VIP+ The same as VIP, but... 5 more monthly tokens, a seasonal gold token, higher giveaway priority, access to VIP+ only giveaways, and access to future plans for my YT and Twitch.
 """
 
 demonsROLE = """
