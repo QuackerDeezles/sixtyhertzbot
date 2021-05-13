@@ -49,75 +49,6 @@ async def get_wealth_data(person):
 async def _ping(ctx): # Defines a new "context" (ctx) command called "ping."
     #await ctx.respond()
     await ctx.send(f"Pong! ({int(client.latency*1000)}ms)")
-@slash.slash(name="wealth", 
-            description="Displays your current wealth balance in tokens.",
-            options=[manage_commands.create_option(
-                name = "member",
-                description = "Person whose wealth you want to check",
-                option_type = 6,
-                required = False
-              )],
-            guild_ids=guild_ids)
-async def _wealth(ctx, member = None): # Defines a new "context" (ctx) command called "ping."
-    
-		if not member:
-				person = ctx.author
-		tokendata = await get_wealth_data(person)
-		
-		tokens = tokendata['tokens']
-		goldtokens = tokendata['gold tokens']
-		
-		desc = f":coin: **Tokens:** {tokens} \n{GOLD_TOKEN_EMOJI} **Gold Tokens:** {goldtokens}  "
-		em = discord.Embed(title=f'Token Wealth',
-												description=desc,
-												color=discord.Color.green())
-		em.set_author(name=person.name, icon_url=person.avatar_url)
-		await ctx.send(embed=em)
-
-@slash.slash(name="shop", 
-            description="Shows the current token shop.",
-            guild_ids=guild_ids)
-async def _gdshop(ctx): # Defines a new "context" (ctx) command called "ping."
-    
-    #await ctx.respond()
-    embed = discord.Embed(title='60hz Gang Shop', color=discord.Color.purple())
-    embed.add_field(name='Normal Shop', value=gdshopToken)
-    embed.add_field(name='Special Shop (1 Gold Token Each)',
-                    value=gdshopGoldToken)
-    await ctx.send(embed=embed)
-
-
-
-@client.command(aliases=['shop', '60hzshop'])
-async def gdshop(ctx):
-    embed = discord.Embed(title='60hz Gang Shop', color=discord.Color.purple())
-    embed.add_field(name='Normal Shop', value=gdshopToken)
-    embed.add_field(name='Special Shop (1 Gold Token Each)',
-                    value=gdshopGoldToken)
-    await ctx.send(embed=embed)
-
-
-
-@client.command(aliases=['bal', 'balance'])
-async def wealth(ctx, *, person: discord.Member = None):
-    if not person:
-        person = ctx.author
-    tokendata = await get_wealth_data(person)
-    
-    tokens = tokendata['tokens']
-    goldtokens = tokendata['gold tokens']
-    
-    desc = f":coin: **Tokens:** {tokens} \n{GOLD_TOKEN_EMOJI} **Gold Tokens:** {goldtokens}  "
-    em = discord.Embed(title=f'Token Wealth',
-                       description=desc,
-                       color=discord.Color.green())
-    em.set_author(name=person.name, icon_url=person.avatar_url)
-    await ctx.send(embed=em)
-
-
-@wealth.error
-async def wealth_error(ctx, error):
-    await ctx.send(error)
 
 getHelpMenudesc = """
 `!help` - This help command
@@ -171,94 +102,7 @@ async def change_tokens(receiver, amount, tokenType):
 		data = getDoc['wealth']
 		data[typeToken] += amount
 		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}})
-@slash.slash(
-  name="give",
-  description="Allows you to give tokens to members. (Only Server Admins can use.)",
-  options=[manage_commands.create_option(
-    name = "receiver",
-    description = "Person who you want to give tokens to",
-    option_type = 6,
-    required = True
-  ),
-  manage_commands.create_option(
-    name = "amount",
-    description = "The amount of tokens you want to give",
-    option_type = 4,
-    required = True,
-  ),
-  manage_commands.create_option(
-    name = "token_type",
-    description = "The type of token you want to give",
-    option_type = 3,
-    required = True,
-    choices = [
-      manage_commands.create_choice("Regular Tokens","Regular Tokens"),
-      manage_commands.create_choice("Gold Tokens","Gold Tokens")
-    ]
-  )
-  ,
-  manage_commands.create_option(
-    name = "reason",
-    description = "The reason why you want to give these tokens",
-    option_type = 3,
-    required = True,
-  )
-  ]
-  
-  ,
-  guild_ids=guild_ids
-  #channel_ids = [805878707012108288,759974319799140412]
-  )
-async def _give(ctx,receiver,amount,token_type, reason):
-	try:
 
-		if ctx.author.guild_permissions.administrator:
-
-			
-			tokenlog = client.get_channel(805951549653778473)
-			
-			#await open_account(users, receiver)
-			if token_type.lower() == 'gold tokens':
-				await change_tokens(receiver, amount, 'gold tokens')
-				em = discord.Embed(
-						title=f'{verifiedEMOJI} Successful Transfer',
-						color=discord.Color.green())
-				em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
-				em.add_field(name='Receiver', value=receiver, inline=False)
-				em.add_field(name='Amount Given',
-											value=f'{amount} gold token(s)',
-											inline=False)
-				em.add_field(name = 'Reason', value = f'{reason}',inline = False)
-				await ctx.send(embed=em)
-				await receiver.send(
-						f"**{ctx.author.name}** has added **{amount} gold tokens** to your 60hz Competition Balance for {reason}"
-				)
-				await tokenlog.send(
-						f"**{ctx.author.name}** has added **{amount} gold tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
-			)
-			else:
-				await change_tokens(receiver, amount, 'tokens')
-				em = discord.Embed(
-						title=f'{verifiedEMOJI} Successful Transfer',
-						color=discord.Color.green())
-				em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
-				em.add_field(name='Receiver', value=receiver, inline=False)
-				em.add_field(name='Amount Given',
-											value=f'{amount} token(s)',
-											inline=False)
-				await ctx.send(embed=em)
-				await receiver.send(
-						f"**{ctx.author.name}** has added **{amount} tokens** to your 60hz Competition Balance for {reason}"
-				)
-				await tokenlog.send(
-						f"**{ctx.author.name}** has added **{amount} regular tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
-				)
-			
-		else:
-				
-				await ctx.send(content = "You do not have permission to use this command.", hidden=True)
-	except Exception as e:
-		await ctx.send(e)
 
 @slash.slash(name = "whisper",
 	description ="Test Command",
@@ -273,108 +117,6 @@ async def _give(ctx,receiver,amount,token_type, reason):
 async def _secret(ctx, message):
   await ctx.respond(eat=True)  # Again, this is optional, but still recommended to.
   await ctx.send(content = f"{message}", hidden=True)
-
-@slash.slash(
-  name="remove",
-  description="Allows you to give remove tokens from members. (Only Server Admins can use.)",
-  options=[manage_commands.create_option(
-    name = "receiver",
-    description = "Person who you want to give tokens to",
-    option_type = 6,
-    required = True
-  ),
-  manage_commands.create_option(
-    name = "amount",
-    description = "The amount of tokens you want to remove",
-    option_type = 4,
-    required = True,
-  ),
-  manage_commands.create_option(
-    name = "token_type",
-    description = "The type of token you want to remove",
-    option_type = 3,
-    required = True,
-    choices = [
-      manage_commands.create_choice("Regular Tokens","Regular Tokens"),
-      manage_commands.create_choice("Gold Tokens","Gold Tokens")
-    ]
-  
-  ),
-  manage_commands.create_option(
-    name = "reason",
-    description = "The reason you want to remove tokens",
-    option_type = 3,
-    required = True
-  )]
-  ,
-  guild_ids=guild_ids
-  )
-async def _remove(ctx,receiver,amount, token_type, reason):
-  if ctx.author.guild_permissions.administrator:
-
-    
-    tokenlog = client.get_channel(805951549653778473)
-    
-    if token_type.lower() == 'gold tokens':
-      await change_tokens(receiver, amount * -1, 'gold tokens')
-      em = discord.Embed(
-          title=f'{verifiedEMOJI} Successful Transfer',
-          color=discord.Color.green())
-      em.add_field(name='Remover',
-                    value=f'{ctx.author}',
-                    inline=False)
-      em.add_field(name='Member', value=receiver, inline=False)
-      em.add_field(name='Amount Removed',
-                    value=f'{amount} gold token(s)',
-                    inline=False)
-      await ctx.send(embed=em)
-      await receiver.send(
-          f"**{ctx.author.name}** has removed **{amount} gold tokens** from your 60hz Competition Balance for {reason}"
-      )
-      await tokenlog.send(
-          f"**{ctx.author.name}** has removed **{amount} gold tokens** from **{receiver.name}**'s 60hz Competition Balance for {reason}"
-      )
-    
-    else:
-      await change_tokens(receiver, amount * -1, 'tokens')
-      em = discord.Embed(
-          title=f'{verifiedEMOJI} Successful Transfer',
-          color=discord.Color.green())
-      em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
-      em.add_field(name='Receiver', value=receiver, inline=False)
-      em.add_field(name='Amount Removed',
-                    value=f'{amount} token(s)',
-                    inline=False)
-      await ctx.send(embed=em)
-      await receiver.send(
-          f"**{ctx.author.name}** has removed **{amount} tokens** from your 60hz Competition Balance"
-      )
-
-      await tokenlog.send(
-          f"**{ctx.author.name}** has removed **{amount} regular tokens** from **{receiver.name}**'s 60hz Competition Balance"
-      )
- 
-  else:
-      await ctx.send(content = "You do not have permission to use this command.", hidden=True)
-@client.command()
-@commands.is_owner()
-async def insert_token_into_db(ctx):
-	with open('tokens.json', 'r') as f:
-		tokenData = json.load(f)
-	for member in list(tokenData):
-		getDoc = tokens.find_one({"_id" : int(member)})
-		if not getDoc:
-			
-			regTokensData = tokenData[member]['tokens']
-			goldTokensData = tokenData[member]['gold tokens']
-			data = {
-			"RegularTokens" : int(regTokensData),
-			"GoldTokens" : int(goldTokensData)
-			}
-			tokens.insert_one({"_id": int(member), "wealth" : data})
-		
-
-
 	
 @slash.slash(
 	name = "rule",
@@ -404,7 +146,6 @@ async def insert_token_into_db(ctx):
 async def _rules(ctx, rule):
 		ruledesc = ''
 		rulereason = ''
-
 
 		if rule == "1":
 				ruledesc = 'No Spamming'
@@ -519,90 +260,6 @@ async def _role(ctx, role):
 				await ctx.send(embed = em)
 
 
-				
-
-@client.command(aliases=['donate', 'transfer', 'give'])
-@commands.has_permissions(administrator=True)
-async def giveTokens(ctx, receiver: discord.Member, grant: int, reason=None):
-		if str(ctx.guild.id) == '757383943116030074':
-				#if grant > 200:
-				#await ctx.send("You can't give that many tokens at once!")
-				#else:
-				tokenlog = client.get_channel(805951549653778473)
-				
-
-				def check(m):
-						return m.channel.id == ctx.channel.id and m.author.id == ctx.author.id
-
-				await ctx.send(
-						"Which token type do you want to give? (The receiver needs to have Dm's on to get the transaction receipt from the bot)"
-				)
-				try:
-
-						tokenType = await client.wait_for("message",
-																							check=check,
-																							timeout=20)
-						token_type = tokenType
-						if token_type.lower() in ['gold tokens','tokens']:
-
-							if token_type.lower() == 'gold tokens':
-								await change_tokens(receiver, grant, 'gold tokens')
-								em = discord.Embed(
-										title=f'{verifiedEMOJI} Successful Transfer',
-										color=discord.Color.green())
-								em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
-								em.add_field(name='Receiver', value=receiver, inline=False)
-								em.add_field(name='Amount Given',
-															value=f'{grant} gold token(s)',
-															inline=False)
-								em.add_field(name = 'Reason', value = f'{reason}',inline = False)
-								await ctx.send(embed=em)
-								await receiver.send(
-										f"**{ctx.author.name}** has added **{grant} gold tokens** to your 60hz Competition Balance for {grant}"
-								)
-								await tokenlog.send(
-										f"**{ctx.author.name}** has added **{grant} gold tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
-								)
-							else:
-								await change_tokens(receiver, grant, 'tokens')
-								em = discord.Embed(
-										title=f'{verifiedEMOJI} Successful Transfer',
-										color=discord.Color.green())
-								em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
-								em.add_field(name='Receiver', value=receiver, inline=False)
-								em.add_field(name='Amount Given',
-															value=f'{grant} token(s)',
-															inline=False)
-								await ctx.send(embed=em)
-								await receiver.send(
-										f"**{ctx.author.name}** has added **{grant} tokens** to your 60hz Competition Balance for {reason}"
-								)
-								await tokenlog.send(
-										f"**{ctx.author.name}** has added **{grant} regular tokens** to **{receiver.name}**'s 60hz Competition Balance for {reason}"
-								)
-						else:
-								await ctx.send(
-										"That isn't a valid option. Try again and say either `gold token` or `token`"
-								)
-						
-				except asyncio.TimeoutError:
-						await ctx.send("You took too much time. Try again.")
-
-
-
-@giveTokens.error
-async def give_tokens_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(
-            "You are missing some arguments. Try doing: `!give <@Member> <amount>`"
-        )
-    elif isinstance(error, commands.MissingPermissions):
-        await ctx.send(
-            ":x: You do not have the required permissions to use this command.")
-    else:
-        await ctx.send(error)
-
-
 @client.command()
 async def vote(ctx):
     em = discord.Embed(
@@ -672,202 +329,6 @@ async def role_info_error(ctx, error):
                        description=f'{error}',
                        color=discord.Color.red())
     await ctx.send(embed=em)
-
-
-@client.command(aliases=['lb'])
-async def leaderboard(ctx, num=10):
-	print('function loaded')
-	#guild = ctx.guild
-	if num <= 25:
-		async with ctx.typing():
-
-			collections = tokens.find()
-			userlist = []
-			for doc in collections:
-				userlist.append(str(doc['_id']))
-			leaderboard = {}
-			total = []
-			
-			addedPoint = cycle([0.1, 0.15, 0.2, 0,25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
-			for mem in userlist:
-					document = tokens.find_one({"_id" : int(mem)})
-					name = int(mem)  # getting member.id in int form
-					token = document['wealth']['RegularTokens']  # number of tokens someone has
-					new_token = token + next(addedPoint)
-					leaderboard[new_token] = name  # Allows someone to get name of person with x tokens
-					total.append(new_token)  # adding token values of all users
-			total = sorted(total, reverse=True)  # sorting tokens greatest to least
-			em = discord.Embed(title='Tokens Leaderboard',
-													color=discord.Color.blue())
-			idx = 1
-			
-
-			for data in total:
-					if num <= 10:
-
-							id_ = leaderboard[data] 
-							getMemberInfoWithID = tokens.find_one({"_id" : id_})
-							mem = client.get_user(id_)
-							if not mem:
-								mem = await client.fetch_user(id_)
-							goldToken = getMemberInfoWithID['wealth']['GoldTokens']
-							name = mem.name
-							em.add_field(
-									name=f"{idx}. {name}",
-									value=f"`{int(data)} Tokens` | *{goldToken}*  Gold Tokens  ",
-									inline=False)
-							if idx == num:
-									break
-							else:
-									idx += 1
-					else:
-							id_ = leaderboard[data]
-							getMemberInfoWithID = tokens.find_one({"_id" : id_})
-							mem = client.get_user(id_)
-							if not mem:
-								mem = await client.fetch_user(id_)
-							goldToken = getMemberInfoWithID['wealth']['GoldTokens']
-							name = mem.name
-							em.add_field(
-									name=f"{idx}. {name}",
-									value=f"`{int(data)} Tokens` | *{goldToken}*  Gold Tokens  ",
-									inline=False)
-							if idx == num:
-									break
-							else:
-									idx += 1
-		await ctx.send(embed=em)
-	else:
-		await ctx.send("That's too many people to display at once!")
-@client.command(aliases=['difflb'])
-async def newleaderboard(ctx, num=10):
-	print('function loadede')
-	#guild = ctx.guild
-	if num <= 25:
-		async with ctx.typing():
-
-			sortedRanks = tokens.find().sort("wealth.RegularTokens", -1)
-			em = discord.Embed(title='Tokens Leaderboard', color=discord.Color.blue())
-			idx = 1
-			for doc in sortedRanks:
-				try:
-
-					person = client.get_user(doc["_id"])
-					regToken = doc['wealth']['RegularTokens']
-					goldToken = doc['wealth']['GoldTokens']
-					em.add_field(
-									name=f"{idx}. {person.name}",
-									value=f"`{regToken} Tokens` | *{goldToken}*  Gold Tokens  ",
-									inline=False)
-				except:
-					break
-				finally:
-
-					idx += 1
-			await ctx.send(embed = em)
-
-		
-	
-	else:
-		await ctx.send("That's too many people to display at once!")
-@leaderboard.error
-async def leaderboard_error(ctx,error):
-	await ctx.send(error)
-
-@client.command()
-async def remove(ctx, receiver: discord.Member, *, removed: int):
-    if str(ctx.guild.id) == '757383943116030074':
-        #if removed > 200:
-        #await ctx.send("You can't remove that many tokens at once!")
-        #else:
-        tokenlog = client.get_channel(805951549653778473)
-        with open('tokens.json', 'r') as f:
-            users = json.load(f)
-        await open_account(users, receiver)
-
-        def check(m):
-            return m.channel.id == ctx.channel.id and m.author.id == ctx.author.id
-
-        await ctx.send(
-            "Which token type do you want to remove? (The receiver needs to have Dm's on to get the transaction receipt from the bot)"
-        )
-        try:
-
-            tokenType = await client.wait_for("message",
-                                              check=check,
-                                              timeout=20)
-            if tokenType.content.lower() == 'gold token':
-                await change_tokens(users, receiver, removed * -1,
-                                    'gold tokens')
-                em = discord.Embed(
-                    title=f'{verifiedEMOJI} Successful Transfer',
-                    color=discord.Color.green())
-                em.add_field(name='Remover',
-                             value=f'{ctx.author}',
-                             inline=False)
-                em.add_field(name='Member', value=receiver, inline=False)
-                em.add_field(name='Amount Removed',
-                             value=f'{removed} gold token(s)',
-                             inline=False)
-                await ctx.send(embed=em)
-                await receiver.send(
-                    f"**{ctx.author.name}** has removed **{removed} gold tokens** from your 60hz Competition Balance"
-                )
-                await tokenlog.send(
-                    f"**{ctx.author.name}** has removed **{removed} gold tokens** from **{receiver.name}**'s 60hz Competition Balance"
-                )
-
-            elif (tokenType.content.lower()
-                  == 'token') or (tokenType.content.lower()
-                                  == 'regular token'):
-                await change_tokens(users, receiver, removed * -1, 'tokens')
-                em = discord.Embed(
-                    title=f'{verifiedEMOJI} Successful Transfer',
-                    color=discord.Color.green())
-                em.add_field(name='Giver', value=f'{ctx.author}', inline=False)
-                em.add_field(name='Receiver', value=receiver, inline=False)
-                em.add_field(name='Amount Renoved',
-                             value=f'{removed} token(s)',
-                             inline=False)
-                await ctx.send(embed=em)
-                await receiver.send(
-                    f"**{ctx.author.name}** has removed **{removed} tokens** from your 60hz Competition Balance"
-                )
-
-                await tokenlog.send(
-                    f"**{ctx.author.name}** has removed **{removed} regular tokens** from **{receiver.name}**'s 60hz Competition Balance"
-                )
-            else:
-                await ctx.send(
-                    "That isn't a valid option. Try again and say either `gold token` or `token`"
-                )
-            with open('tokens.json', 'w') as f:
-                json.dump(users, f)
-        except asyncio.TimeoutError:
-            await ctx.send("You took too much time. Try again.")
-    else:
-        pass
-
-
-@client.command(aliases=['competitions'])
-async def competition(ctx):
-    em = discord.Embed(title='Current Competition',
-                       description=competition_info,
-                       color=discord.Color.purple())
-    await ctx.send(embed=em)
-
-
-@client.command(aliases=['list', 'link', 'lists'])
-async def links(ctx):
-    em = discord.Embed(title='List Links',
-                       description=list_desc,
-                       color=discord.Color.blue())
-    await ctx.send(embed=em)
-
-
-
-
-
 
 
 @client.command()
@@ -959,9 +420,7 @@ async def on_ready():
         activity=discord.Activity(
             type=discord.ActivityType.streaming,
             name=f"Geometry Dash",
-            url='https://www.youtube.com/watch?v=c9na_ojJRuI'))
-    
-
+            url='https://www.youtube.com/watch?v=FxC7vJ5gsBw'))
 
 @client.event
 async def on_message(msg):
@@ -976,17 +435,6 @@ async def on_message(msg):
     await client.process_commands(msg)
 
 
-@client.command(aliases=['collabSS', 'collabss', 'add'])
-async def collabsuggest(ctx, *, suggestion):
-    with open('collabs.json', 'r') as f:
-        suggesters = json.load(f)
-    suggesters.append(suggestion)
-    with open('collabs.json', 'w') as f:
-        json.dump(suggesters, f)
-    await ctx.send(f"{verifiedEMOJI} Collab Suggestion Added!")
-
-    pass
-
 
 @client.command()
 async def suggestions(ctx):
@@ -998,7 +446,6 @@ async def suggestions(ctx):
         em.add_field(name=f'Suggestion {x}', value=suggestion)
         x += 1
     await ctx.send(embed=em)
-
 
 @client.command(aliases=['clearsuggestion'])
 @commands.has_permissions(kick_members=True)
@@ -1075,6 +522,7 @@ async def warn(ctx,member : discord.Member = None, *, reason = None):
   numWarns = len(memData["warns"])
   await ctx.send(embed = em)
   await member.send(f"You were warned in **{ctx.guild.name}**. You now have {numWarns} warns.")
+  
 @client.command()
 @commands.has_permissions(manage_messages = True)
 async def clearwarns(ctx,member : discord.Member = None):
@@ -1213,28 +661,6 @@ async def rules(ctx, *, page: int = None):
 				await ctx.send(embed=em)
 
 @client.command()
-async def meetstaff(ctx, *, page: int = None):
-		staffname = ''
-		staffintro = ''
-		not_desc = 'Page **1**: QuackerDeezlesYT'
-		if not page:
-				em = discord.Embed(title='60hz Gang Staff Introductions',
-													description=not_desc,
-													color=discord.Color.green())
-				await ctx.send(embed=em)
-		else:
-
-				if page == 1:
-						staffname = 'QuackerDeezlesYT'
-						staffintro = 'Heyy! I’m QuackerDeezles, a 13 year old asshole from the US, born on December 15. I love math, music (playing piano and percussion, listening to dubstep, and sometimes composing when I feel like it), puzzles, ducks :duck: , and of course, Geometry Dash! Many people don’t believe this but I have gotten my name a couple years ago while going to the city library. I started playing Geometry Dash around May 2015, and since then it’s my favorite video game. Other than that, I play skribbl.io and Fall Guys when I just want to take a break from GD.\n\nThe times I get on Discord are on and off, sometimes I have a shit-ton of homework and some days I barely have anything to do. My DM’s are open so feel free if you want to chat!\n\nOther than that, I don’t really have much else. Hope you have a great rest of your day!'
-				
-				em = discord.Embed(
-						title=f'{staffname}\'s Introducion',
-						description=f'{staffintro}',
-						color=discord.Color.green())
-				await ctx.send(embed=em)
-
-@client.command()
 async def server(ctx):
     em = discord.Embed(title='Official Bot Server',
                        description='https://discord.gg/JMnEK3gZcZ',
@@ -1267,7 +693,5 @@ async def on_message_delete(msg):
       await msg.channel.send(embed = em)
   else:
     pass
-
-
 
 client.run(os.getenv("TOKEN"))
