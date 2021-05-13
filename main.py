@@ -35,16 +35,6 @@ tokens = db['tokens']
 warns = db['warns']
 
 
-async def get_wealth_data(person):
-	getDoc = tokens.find_one({"_id" : person.id})
-	if not getDoc:
-		return {"tokens" : 0, "gold tokens" : 0}
-	else:
-		regularTokens = getDoc['wealth']['RegularTokens']
-		goldTokens = getDoc['wealth']['GoldTokens']
-		return {"tokens" : regularTokens, "gold tokens" : goldTokens}
-
-
 @slash.slash(name="ping", description="Returns the latency of the bot", guild_ids=guild_ids)
 async def _ping(ctx): # Defines a new "context" (ctx) command called "ping."
     #await ctx.respond()
@@ -76,32 +66,6 @@ getHelpMenudesc = """
 # @slash.slash(name = "give", description = "Gives tokens to a member", guild_ids = [757383943116030074], options = options)
 # async def give(ctx : SlashContext, amount):
 #   await ctx.send("I didn't give anything to anyone.")
-
-
-
-async def change_tokens(receiver, amount, tokenType):
-	getDoc = tokens.find_one({"_id" : receiver.id})
-	typeToken = ""
-	if tokenType == 'gold tokens':
-		typeToken = "GoldTokens"
-	elif tokenType == 'tokens':
-		typeToken = "RegularTokens"
-	else:
-		return None
-	if not getDoc:
-		data = {
-			"RegularTokens" : 0,
-			"GoldTokens" : 0
-		}
-		tokens.insert_one({"_id" : receiver.id, "wealth" : data}) # insert original data (unnesccary technically, but it's ok)
-		
-		
-		data[typeToken] += amount # Update number based on datatype
-		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}}) # db update
-	else:
-		data = getDoc['wealth']
-		data[typeToken] += amount
-		tokens.update_one({"_id" : receiver.id}, {"$set" : {"wealth" : data}})
 
 
 @slash.slash(name = "whisper",
@@ -198,14 +162,10 @@ async def _rules(ctx, rule):
     	option_type = 3,
     	required = True,
 			choices = [
-				manage_commands.create_choice("1", "Demon Roles"),
-				manage_commands.create_choice("2", "GD/Self Roles"),
-				manage_commands.create_choice("3","Competition Roles"),
-				manage_commands.create_choice("4","Collaboration Roles"),
-				manage_commands.create_choice("5","Staff Roles"),
-				manage_commands.create_choice("6","Perk Roles"),
-				manage_commands.create_choice("7","Misc Roles"),
-				manage_commands.create_choice("8","Ping Roles")
+				manage_commands.create_choice("1","GD/Self Roles"),
+				manage_commands.create_choice("2","Staff Roles"),
+				manage_commands.create_choice("3","Perk Roles"),
+				manage_commands.create_choice("4","Ping Roles")
 				
 			]
   )
@@ -218,42 +178,23 @@ async def _role(ctx, role):
 				em = discord.Embed(
 						title='Table of Contents',
 						description=
-						'Use `!roleinfo <page>` to find information about a specific category of roles \n\n**1** - Table of Contents (current page)\n**2** - Demons \n**3** - GD/Self Roles \n**4** - Competitions \n**5** - Collabs \n**6** - Moderation (admin, trial admin, etc.) \n**7** - Perks (vip, server booster, donator, etc.) \n**8** - Ping roles',
+						'Use `!roleinfo <page>` to find information about a specific category of roles \n\n**1** - Table of Contents (current page)\n**2** - GD/Self Roles \n**3** - Moderation (admin, trial admin, etc.) \n**4** - Perks (vip, server booster, donator, etc.) \n*58** - Ping roles',
 						color=discord.Color.blue())
 				await ctx.send(embed=em)
 		elif page == 2:
-				em = discord.Embed(title='Demon Roles',
-													description=f'{demonsROLE}',
-													color=discord.Color.blue())
+				em = discord.Embed(title='GD/Self Roles', description=f'Get these roles in <#797897371866234910> by reacting!\n{gdrolesROLE}', color=discord.Color.red())
 				await ctx.send(embed=em)
 		elif page == 3:
-				em = discord.Embed(title='GD/Self Roles',
-													description=f'Get these roles in <#797897371866234910> by reacting!\n{gdrolesROLE}',
-													color=discord.Color.red())
-				await ctx.send(embed=em)
-		elif page == 4:
-				em = discord.Embed(title='Competition Roles',
-													description=f'{competitionROLE}',
-													color=discord.Color.green())
-				await ctx.send(embed=em)
-		elif page == 5:
-				em = discord.Embed(title='Collaboration Roles',
-													description=f'{collabROLE}',
-													color=discord.Color.blue())
-				await ctx.send(embed=em)
-		elif page == 6:
 				em = discord.Embed(title='Moderation Roles',
 													description=f'{moderationsROLE}',
 													color=discord.Color.blue())
 				await ctx.send(embed=em)
-		elif page == 7:
+		elif page == 4:
 				em = discord.Embed(title='Perk Roles :smirk: ',
 													description=f'{perksROLE}',
 													color=discord.Color.blue())
 				await ctx.send(embed=em)
-		
-		
-		elif page == 8:
+		elif page == 5:
 				em = discord.Embed(title = "Ping Roles",
 													description = f"{pingsROLE}",
 													color = discord.Color.blue())
