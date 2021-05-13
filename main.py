@@ -338,30 +338,26 @@ async def staff(ctx):
     listofAdmins = []
     listofTA = []
     listofTM = []
-    listofLM = []
     for member in ctx.guild.members:
         for role in member.roles:
-            if role.name.lower() == 'trial admin':
+            if role.name.lower() == 'trainee duck watchman':
                 listofTA.append(member.name)
-            elif role.name.lower() == 'trial mod':
+            elif role.name.lower() == 'trianee headman ducks':
                 listofTM.append(member.name)
-            elif role.name.lower() == 'server mod':
+            elif role.name.lower() == 'headman ducks':
                 listofmods.append(member.name)
-            elif role.name.lower() == 'server admin':
+            elif role.name.lower() == 'supreme duck watchman':
                 listofAdmins.append(member.name)
-            elif role.name.lower() == 'developer':
+            elif role.name.lower() == 'dev ducks':
                 listofDevs.append(member.name)
-            elif role.name.lower() == 'list manager':
-                listofLM.append(member.name)
             
     mod = f"**Server Mod ({len(listofmods)})**\n"
     admin = f"**Server Admin ({len(listofAdmins)})**\n"
     trialadmin = f"**Trial Admin ({len(listofTA)})**\n"
     trialmod = f"**Trial Mod ({len(listofTM)})**\n"
     devs = f"**Developers ({len(listofDevs)})**\n"
-    listMods = f"**List Managers ({len(listofLM)})**\n"
     serverowner = f"[**Server Owner**](https://www.youtube.com/channel/UC6PKOburRMFSjwTCQcL4wbQ)"
-    a, b, c, d, e,f,= 1, 1, 1, 1, 1,1
+    a, b, c, d, e,= 1, 1, 1, 1, 1
     for name in listofmods:
         mod += str(a) + ". " + name + '\n'
         a += 1
@@ -379,11 +375,8 @@ async def staff(ctx):
     for name in listofDevs:
         devs += str(e) + ". " + name + '\n'
         e += 1
-    for name in listofLM:
-        listMods += str(f) + ". " + name + '\n'
-        f += 1
 
-    staffdesc = (serverowner + "\n[QuackerDeezlesYT]((https://www.youtube.com/channel/UC6PKOburRMFSjwTCQcL4wbQ))") + '\n\n' + admin + '\n' + trialadmin + '\n' + listMods+ '\n' + mod + '\n' + trialmod + '\n' + devs
+    staffdesc = (serverowner + "\n[QuackerDeezlesYT]((https://www.youtube.com/channel/UC6PKOburRMFSjwTCQcL4wbQ))") + '\n\n' + admin + '\n' + trialadmin + '\n' + mod + '\n' + trialmod + '\n' + devs
     em = discord.Embed(title='Current Staff',
                        description=staffdesc,
                        color=discord.Color.purple())
