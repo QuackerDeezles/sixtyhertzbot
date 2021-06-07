@@ -258,30 +258,26 @@ async def role_info_error(ctx, error):
 @client.command()
 async def staff(ctx):
     listofmods = []
-    listofDevs = []
     listofAdmins = []
     listofTA = []
     listofTM = []
     for member in ctx.guild.members:
         for role in member.roles:
-            if role.name.lower() == 'trainee duck watchman':
+            if role.name.lower() == 'trial admin':
                 listofTA.append(member.name)
-            elif role.name.lower() == 'trianee headman ducks':
+            elif role.name.lower() == 'trial mod':
                 listofTM.append(member.name)
-            elif role.name.lower() == 'headman ducks':
+            elif role.name.lower() == 'moderator':
                 listofmods.append(member.name)
-            elif role.name.lower() == 'supreme duck watchman':
+            elif role.name.lower() == 'admin':
                 listofAdmins.append(member.name)
-            elif role.name.lower() == 'dev ducks':
-                listofDevs.append(member.name)
             
     mod = f"**Server Mod ({len(listofmods)})**\n"
     admin = f"**Server Admin ({len(listofAdmins)})**\n"
     trialadmin = f"**Trial Admin ({len(listofTA)})**\n"
     trialmod = f"**Trial Mod ({len(listofTM)})**\n"
-    devs = f"**Developers ({len(listofDevs)})**\n"
     serverowner = f"[**Server Owner**](https://www.youtube.com/channel/UCpnLOdwciYkZfdGzDvbrE7w)"
-    a, b, c, d, e,= 1, 1, 1, 1, 1
+    a, b, c, d= 1, 1, 1, 1
     for name in listofmods:
         mod += str(a) + ". " + name + '\n'
         a += 1
@@ -296,11 +292,8 @@ async def staff(ctx):
     for name in listofTM:
         trialmod += str(d) + ". " + name + '\n'
         d += 1
-    for name in listofDevs:
-        devs += str(e) + ". " + name + '\n'
-        e += 1
 
-    staffdesc = (serverowner + "\n[nowaR]((https://www.youtube.com/channel/UCpnLOdwciYkZfdGzDvbrE7w))") + '\n\n' + admin + '\n' + trialadmin + '\n' + mod + '\n' + trialmod + '\n' + devs
+    staffdesc = (serverowner + "\n[nowaR]((https://www.youtube.com/channel/UCpnLOdwciYkZfdGzDvbrE7w))") + '\n\n' + admin + '\n' + trialadmin + '\n' + mod + '\n' + trialmod
     em = discord.Embed(title='Current Staff',
                        description=staffdesc,
                        color=discord.Color.purple())
