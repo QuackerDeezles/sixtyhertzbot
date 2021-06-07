@@ -280,7 +280,7 @@ async def staff(ctx):
     trialadmin = f"**Trial Admin ({len(listofTA)})**\n"
     trialmod = f"**Trial Mod ({len(listofTM)})**\n"
     devs = f"**Developers ({len(listofDevs)})**\n"
-    serverowner = f"[**Server Owner**](https://www.youtube.com/channel/UC6PKOburRMFSjwTCQcL4wbQ)"
+    serverowner = f"[**Server Owner**](https://www.youtube.com/channel/UCpnLOdwciYkZfdGzDvbrE7w)"
     a, b, c, d, e,= 1, 1, 1, 1, 1
     for name in listofmods:
         mod += str(a) + ". " + name + '\n'
