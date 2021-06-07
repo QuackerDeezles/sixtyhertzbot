@@ -300,11 +300,12 @@ async def staff(ctx):
         devs += str(e) + ". " + name + '\n'
         e += 1
 
-    staffdesc = (serverowner + "\n[QuackerDeezlesYT]((https://www.youtube.com/channel/UC6PKOburRMFSjwTCQcL4wbQ))") + '\n\n' + admin + '\n' + trialadmin + '\n' + mod + '\n' + trialmod + '\n' + devs
+    staffdesc = (serverowner + "\n[nowaR]((https://www.youtube.com/channel/UCpnLOdwciYkZfdGzDvbrE7w))") + '\n\n' + admin + '\n' + trialadmin + '\n' + mod + '\n' + trialmod + '\n' + devs
     em = discord.Embed(title='Current Staff',
                        description=staffdesc,
                        color=discord.Color.purple())
     #em.set_thumbnail(url = ctx.guild.icon_url)
+    em.set_footer(text="Quacker is not listed as he is founder, not the real owner.")
     await ctx.send(embed=em)
 
 
