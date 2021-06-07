@@ -87,16 +87,11 @@ moderationsROLE = """
 <@&760317079466409994> Moderators of this server
 <@&827221507910270976> Those training to become an admin
 <@&779053192184987689> Those training to become a mod
-<@&758790944521715804> Developers of 60hz Gang Bot
-<@&811406896120201226> Those that will help add and place levels to the server 60hz and non-60hz lists
 
 """
 
 perksROLE = """
-<@&783009905988468807> Someone who has boosted the server pog. They also get 20 monthly tokens.
-<@&796088132008804352> Someone who has donated to the server in some way. If they have  given nitro to someone that boosted the server with nitro, they get 10 tokens per boost. For every US dollar they donate to the server (excluding nitro), they get another 10 tokens.
-<@&803486749253828658> A role given to a special few that get the following perks: 5 monthly tokens, #advertising at any level, giveaway priority, VIP on my Twitch streams, access to VIP and VIP+ only giveaways, and access to future plans for this server.
-<@&803486811480391680> The same as VIP, but... 5 more monthly tokens, a seasonal gold token, higher giveaway priority, access to VIP+ only giveaways, and access to future plans for my YT and Twitch.
+<@&783009905988468807> Someone who has boosted the server!
 <@&799003895531438101> - A member in the server that is level 5. With level 5, you will get access to #advertising and be able to post images and gifs in #general
 """
 
@@ -119,8 +114,6 @@ leaderboardToppers = """
 
 pingsROLE = """
 <@&802157960180662292> Get pinged for general announcements
-<@&807781898495197235> Get pinged for new giveaways! 
-<@&803450408676491264> Get pinged for MoonFrost's uploads on YouTube
-<@&803450292209057882> Get pinged for MoonFrost's live streams on Twitch
-<@&811795170516533278> Get pinged for latest 60hz Gang list updates
+<@&803450408676491264> Get pinged for nowaR's uploads on YouTube
+<@&803450292209057882> Get pinged for nowaR's Twitch streams
 """

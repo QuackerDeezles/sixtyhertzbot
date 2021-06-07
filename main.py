@@ -312,7 +312,7 @@ async def boosters(ctx):
 			# 		if role.name.lower() == 'server booster':
 			# 				listofBoo.append(member.name)
 		a = 1
-		serverBoosters = f"<:sparkleboost:825156918519398410> **Server Boosters ({len(listofBoo)})**\n"
+		serverBoosters = f"**Server Boosters ({len(listofBoo)})**\n"
 		for name in listofBoo:
 			serverBoosters += str(a) + ". " + name + '\n'
 			a += 1
