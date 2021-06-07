@@ -4,7 +4,6 @@ roleParagraphs = """
 @Server Mod Moderators of this server
 @Trial Admin Those training to become an admin
 @Trial Mod Those training to become a mod
-@Developer Creators of Discord bots or other coding things
 
 @Destroying the Competition!! Anyone with 5+ competition wins
 @Competition Winner! Anyone with one more competition wins
