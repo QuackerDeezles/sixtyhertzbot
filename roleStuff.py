@@ -115,5 +115,5 @@ leaderboardToppers = """
 pingsROLE = """
 <@&802157960180662292> Get pinged for general announcements
 <@&803450408676491264> Get pinged for nowaR's uploads on YouTube
-<@&803450292209057882> Get pinged for nowaR's Twitch streams
+<@&851547990418259968> Get pinged for nowaR's Twitch streams
 """
