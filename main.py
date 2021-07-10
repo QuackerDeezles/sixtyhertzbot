@@ -605,4 +605,8 @@ async def on_message_delete(msg):
   else:
     pass
 
+@client.command()
+async def hi(ctx):
+	await ctx.send("hi")
+
 client.run(os.getenv("TOKEN"))
